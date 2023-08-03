@@ -25,7 +25,7 @@ public class Client {
         this.lastName = lastName;
         this.email = email;
     }
-
+//getters
     public Long getId() {
         return id;
     }
@@ -41,7 +41,7 @@ public class Client {
     public String getEmail() {
         return email;
     }
-
+//setters
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
