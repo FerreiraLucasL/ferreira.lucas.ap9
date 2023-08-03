@@ -13,45 +13,44 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
-    private String dni;
-    private String name;
-    private String lname;
+    private String firstName;
+    private String lastName;
+    private String email;
 
 //constructores
     public Client(){}
-    public Client(String dni, String name, String lname) {
-        this.dni = dni;
-        this.name = name;
-        this.lname = lname;
-    }
 
-//getters
+    public Client(String firstName, String lastName, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+    }
 
     public Long getId() {
         return id;
     }
 
-    public String getDni() {
-        return dni;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public String getName() {
-        return name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public String getLname() {
-        return lname;
-    }
-//setters
-    public void setDni(String dni) {
-        this.dni = dni;
+    public String getEmail() {
+        return email;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public void setLname(String lname) {
-        this.lname = lname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
