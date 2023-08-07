@@ -1,5 +1,6 @@
 package com.mindhub.homebanking.models;
 
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -45,7 +46,6 @@ public class Account {
     public Double getBalance() {
         return balance;
     }
-
     public Long getClientId() {
         return clientId.getId();
     }

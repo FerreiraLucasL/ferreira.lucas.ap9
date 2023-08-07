@@ -26,9 +26,9 @@ public class HomebankingApplication {
 			clientRepository.save(client2);
 			Account account1 = new Account("VIN001", 5000.0);
 			accountRepository.save(account1);
+			client1.addAccount(account1);
 			Account account2 = new Account("VIN002", 7000.0);
 			accountRepository.save(account2);
-			client1.addAccount(account1);
 			client1.addAccount(account2);
 		};
 	}

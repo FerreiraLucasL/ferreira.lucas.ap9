@@ -50,7 +50,12 @@ public class Client {
     public String getEmail() {
         return email;
     }
-//setters
+
+    public Set<Account> getAccounts() {
+        return accounts;
+    }
+
+    //setters
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
