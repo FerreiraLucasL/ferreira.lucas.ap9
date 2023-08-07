@@ -6,6 +6,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.Set;
+import java.util.HashSet;
+import javax.persistence.OneToMany;
+import javax.persistence.FetchType;
 
 @Entity
 public class Client {
@@ -17,6 +21,10 @@ public class Client {
     private String lastName;
     private String email;
 
+    @OneToMany(mappedBy = "clientId", fetch = FetchType.EAGER)
+    Set<Account> accounts = new HashSet<>();
+
+
 //constructores
     public Client(){}
 
@@ -25,7 +33,8 @@ public class Client {
         this.lastName = lastName;
         this.email = email;
     }
-//getters
+
+    //getters
     public Long getId() {
         return id;
     }
@@ -53,4 +62,12 @@ public class Client {
     public void setEmail(String email) {
         this.email = email;
     }
+
+//metodos
+    //agregar cuenta
+    public void addAccount(Account account){
+        account.setClientId(this);
+        accounts.add(account);
+    }
+
 }
