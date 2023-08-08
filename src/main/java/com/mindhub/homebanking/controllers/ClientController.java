@@ -28,7 +28,7 @@ public class ClientController {
         return convertedList;
     }
     //devolver cliente por id
-    @GetMapping("/client/{id}")
+    @GetMapping("/clients/{id}")
     public Optional<Client> getClient(@PathVariable Long id){
         return clientRepository.findById(id);
     }
