@@ -13,6 +13,7 @@ import javax.persistence.FetchType;
 
 @Entity
 public class Client {
+//atributos
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")

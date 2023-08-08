@@ -16,7 +16,7 @@ public class Account {
     private String number;
     private LocalDate creationDate;
     private Double balance;
-//relacion entre cuenta y persona
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
     private Client clientId;
@@ -24,9 +24,9 @@ public class Account {
 //constructores
     public Account() {}
 
-    public Account(String number, Double balance) {
+    public Account(String number, Double balance, LocalDate date) {
         this.number = number;
-        this.creationDate = LocalDate.now();
+        this.creationDate = date;
         this.balance = balance;
     }
 
@@ -46,10 +46,10 @@ public class Account {
     public Double getBalance() {
         return balance;
     }
+
     public Long getClientId() {
         return clientId.getId();
     }
-
     //setters
 
     public void setNumber(String number) {
