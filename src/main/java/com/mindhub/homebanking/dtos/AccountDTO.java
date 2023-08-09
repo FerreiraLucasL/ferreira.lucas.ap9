@@ -19,6 +19,7 @@ public class AccountDTO {
         creationDate = account.getCreationDate();
         balance = account.getBalance();
         clientId = account.getClientId();
+        //lista de transactionsDTO
     }
 
     public Long getId() {

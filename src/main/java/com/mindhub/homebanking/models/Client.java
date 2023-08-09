@@ -76,4 +76,10 @@ public class Client {
         accounts.add(account);
     }
 
+    //agregar transaccion
+    public void addTransaction(Transaction transaction, Account account){
+        account.addTransaction(transaction);
+
+    }
+
 }

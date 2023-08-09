@@ -19,7 +19,7 @@ public class ClientController {
     @Autowired
     //servicio que busca en la BD
     private ClientRepository clientRepository;
-    //devolver todos los clientes
+    //peticion HTTP(get) para devolver todos los clientes
     @GetMapping("/clients")
     public List<ClientDTO> getClients(){
         List<Client> clients = clientRepository.findAll();
@@ -27,7 +27,7 @@ public class ClientController {
                 map(client -> new ClientDTO(client)).collect(Collectors.toList());
         return convertedList;
     }
-    //devolver cliente por id
+    //peticion HTTP(get) para devolver 1 cliente
     @GetMapping("/clients/{id}")
     public Optional<Client> getClient(@PathVariable Long id){
         return clientRepository.findById(id);
