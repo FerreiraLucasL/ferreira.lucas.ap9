@@ -22,7 +22,7 @@ public class TransactionController {
         return all;
     }
 
-    @GetMapping("/transaction/{id}")
+    @GetMapping("/transactions/{id}")
     public Optional<Transaction> getTransaction(@PathVariable Long id){
         Optional<Transaction> byId;
         byId = transactionRepository.findById(id); return byId;

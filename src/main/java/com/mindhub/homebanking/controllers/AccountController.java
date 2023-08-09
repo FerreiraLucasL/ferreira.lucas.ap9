@@ -26,7 +26,7 @@ public class AccountController {
         return convertedList;
     }
 
-    @GetMapping("/account/{id}")
+    @GetMapping("/accounts/{id}")
     public Optional<Account> getAccount(@PathVariable Long id){
         return accountRepository.findById(id);
     }
