@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDate;
+import java.util.*;
 
 import static com.mindhub.homebanking.models.TransactionType.DEBIT;
 
@@ -28,6 +29,13 @@ public class HomebankingApplication {
 		return (args) -> {
 			LocalDate today = LocalDate.now();
 			LocalDate tomorrow = today.plusDays(1);
+			List<Integer> cuotasHipotecario = new ArrayList<>() {};
+			cuotasHipotecario.addAll(Arrays.asList(new Integer[] {12,24,36,48,60}));
+			List<Integer> cuotasPersonal = new ArrayList<>() {};
+			cuotasPersonal.addAll(Arrays.asList(new Integer[] {6,12,24}));
+			List<Integer> cuotasAutomotriz = new ArrayList<>() {};
+			cuotasAutomotriz.addAll(Arrays.asList(new Integer[] {6,12,24,36}));
+
 			//carga de datos
 			Client client1 = new Client("jorge","delsoto","jorgelin@gmail.com");
 			Client client2 = new Client("pedro","alcazar","aksdoakmsd@gmail.com");
@@ -37,6 +45,8 @@ public class HomebankingApplication {
 			Transaction transaction1 = new Transaction(TransactionType.DEBIT, 10000.0, "lorem ipsum :v ", today);
 			Transaction transaction2 = new Transaction(TransactionType.CREDIT, 5000.0, "lorem ipsum :v ", today);
 			Transaction transaction3 = new Transaction(TransactionType.CREDIT, 3000.0, "lorem ipsum :v ", today);
+			Transaction transaction4 = new Transaction(DEBIT, 1500.0, "lorem ipsum :v ", today);
+
 			//asignaciones
 			client1.addAccount(account1);
 			client1.addAccount(account2);
@@ -54,6 +64,7 @@ public class HomebankingApplication {
 			transactionRepository.save(transaction1);
 			transactionRepository.save(transaction2);
 			transactionRepository.save(transaction3);
+			transactionRepository.save(transaction4);
 
 		};
 	}
