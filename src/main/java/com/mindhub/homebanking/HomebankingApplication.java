@@ -1,12 +1,7 @@
 package com.mindhub.homebanking;
 
-import com.mindhub.homebanking.models.Account;
-import com.mindhub.homebanking.models.Client;
-import com.mindhub.homebanking.models.Transaction;
-import com.mindhub.homebanking.models.TransactionType;
-import com.mindhub.homebanking.repositories.AccountRepository;
-import com.mindhub.homebanking.repositories.ClientRepository;
-import com.mindhub.homebanking.repositories.TransactionRepository;
+import com.mindhub.homebanking.models.*;
+import com.mindhub.homebanking.repositories.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -25,15 +20,16 @@ public class HomebankingApplication {
 		SpringApplication.run(HomebankingApplication.class, args);
 	}
 	@Bean
-	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository){
+	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository,
+									  LoanRepository loanRepository, ClientLoanRepository clientLoanRepository){
 		return (args) -> {
 			LocalDate today = LocalDate.now();
 			LocalDate tomorrow = today.plusDays(1);
-			List<Integer> cuotasHipotecario = new ArrayList<>() {};
+			Set<Integer> cuotasHipotecario = new HashSet<>() {};
 			cuotasHipotecario.addAll(Arrays.asList(new Integer[] {12,24,36,48,60}));
-			List<Integer> cuotasPersonal = new ArrayList<>() {};
+			Set<Integer> cuotasPersonal = new HashSet<>() {};
 			cuotasPersonal.addAll(Arrays.asList(new Integer[] {6,12,24}));
-			List<Integer> cuotasAutomotriz = new ArrayList<>() {};
+			Set<Integer> cuotasAutomotriz = new HashSet<>() {};
 			cuotasAutomotriz.addAll(Arrays.asList(new Integer[] {6,12,24,36}));
 
 			//carga de datos
@@ -45,7 +41,17 @@ public class HomebankingApplication {
 			Transaction transaction1 = new Transaction(TransactionType.DEBIT, 10000.0, "lorem ipsum :v ", today);
 			Transaction transaction2 = new Transaction(TransactionType.CREDIT, 5000.0, "lorem ipsum :v ", today);
 			Transaction transaction3 = new Transaction(TransactionType.CREDIT, 3000.0, "lorem ipsum :v ", today);
-			Transaction transaction4 = new Transaction(DEBIT, 1500.0, "lorem ipsum :v ", today);
+			Loan hipotecario = new Loan("Hipotecario",500000.0,cuotasHipotecario);
+			Loan personal = new Loan("Personal",100000.0,cuotasPersonal);
+			Loan automotriz = new Loan("Automotriz",300000.0,cuotasAutomotriz);
+			ClientLoan melbaHipotecario = new ClientLoan(client1, hipotecario, 60,400000.0);
+/*
+    public ClientLoan(Client client, Loan loan, Integer payments, Long amount)
+					Préstamo Hipotecario, 400.000, 60 cuotas.
+					Préstamo Personal, 50.000, 12 cuotas
+*/
+
+
 
 			//asignaciones
 			client1.addAccount(account1);
@@ -64,7 +70,11 @@ public class HomebankingApplication {
 			transactionRepository.save(transaction1);
 			transactionRepository.save(transaction2);
 			transactionRepository.save(transaction3);
-			transactionRepository.save(transaction4);
+			loanRepository.save(hipotecario);
+			loanRepository.save(automotriz);
+			loanRepository.save(personal);
+			clientLoanRepository.save(melbaHipotecario);
+
 
 		};
 	}
