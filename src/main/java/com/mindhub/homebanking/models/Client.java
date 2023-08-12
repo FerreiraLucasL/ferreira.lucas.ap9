@@ -23,7 +23,7 @@ public class Client {
     private String email;
 
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
-    private Set<Account> accounts = new HashSet<>();
+    Set<Account> accounts = new HashSet<>();
 
     //relacion uno a muchos cliente CientePrestamos
     @OneToMany(mappedBy = "loan", fetch = FetchType.EAGER)
@@ -79,7 +79,7 @@ public class Client {
 //metodos
     //agregar cuenta
     public void addAccount(Account account){
-        account.setClient(this);
+        account.setClientId(this);
         accounts.add(account);
     }
 
@@ -87,7 +87,7 @@ public class Client {
     public void addTransaction(Transaction transaction, Account account){
         account.addTransaction(transaction);
     }
-    public void ClientLoan(Client client, Loan loan, Integer payments, Long amount){
+    public void ClientLoan(Client client, Loan loan, Integer payments, Double amount){
         ClientLoan clientLoan = new ClientLoan();
         clientLoan.setLoan(loan);
         clientLoan.setClient(client);
