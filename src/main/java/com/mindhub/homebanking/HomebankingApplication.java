@@ -33,7 +33,7 @@ public class HomebankingApplication {
 			cuotasAutomotriz.addAll(Arrays.asList(new Integer[] {6,12,24,36}));
 
 			//carga de datos
-			Client client1 = new Client("jorge","delsoto","jorgelin@gmail.com");
+			Client client1 = new Client("Melba","Morel","melba@mindhub.com");
 			Client client2 = new Client("pedro","alcazar","aksdoakmsd@gmail.com");
 			Account account1 = new Account("VIN001", 5000.0, today);
 			Account account2 = new Account("VIN002", 7000.0, tomorrow);
@@ -45,13 +45,8 @@ public class HomebankingApplication {
 			Loan personal = new Loan("Personal",100000.0,cuotasPersonal);
 			Loan automotriz = new Loan("Automotriz",300000.0,cuotasAutomotriz);
 			ClientLoan melbaHipotecario = new ClientLoan(client1, hipotecario, 60,400000.0);
-/*
-    public ClientLoan(Client client, Loan loan, Integer payments, Long amount)
-					Préstamo Hipotecario, 400.000, 60 cuotas.
-					Préstamo Personal, 50.000, 12 cuotas
-*/
-
-
+			ClientLoan melbaPersonal = new ClientLoan(client1, personal,12,50000.0);
+			ClientLoan pedroAutomotriz = new ClientLoan(client2, automotriz,24,150000.0);
 
 			//asignaciones
 			client1.addAccount(account1);
@@ -60,6 +55,9 @@ public class HomebankingApplication {
 			client1.addTransaction(transaction1,account1);
 			client1.addTransaction(transaction2,account2);
 			client2.addTransaction(transaction3,account3);
+			client1.ClientLoan(hipotecario,60,400000.0);
+			client1.ClientLoan(personal,12,50000.0);
+			client2.ClientLoan(automotriz,24,150000.0);
 
 			//persistencia
 			clientRepository.save(client1);
@@ -74,7 +72,8 @@ public class HomebankingApplication {
 			loanRepository.save(automotriz);
 			loanRepository.save(personal);
 			clientLoanRepository.save(melbaHipotecario);
-
+			clientLoanRepository.save(melbaPersonal);
+			clientLoanRepository.save(pedroAutomotriz);
 
 		};
 	}

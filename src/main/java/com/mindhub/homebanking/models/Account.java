@@ -19,12 +19,14 @@ public class Account {
     private LocalDate creationDate;
     private Double balance;
 
+//relacion client cuentas
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
     private Client client;
 
-    @OneToMany(mappedBy = "accountId", fetch = FetchType.EAGER)
-    Set<Transaction> transactions = new HashSet<>();
+//relacion cuenta transacciones
+    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
+    private Set<Transaction> transactions = new HashSet<>();
 
 //constructores
     public Account() {}
@@ -75,9 +77,7 @@ public class Account {
 
     //metodos
     public void addTransaction(Transaction transaction){
-        transaction.setAccountId(this);
+        transaction.setAccount(this);
         transactions.add(transaction);
     }
-
-
 }

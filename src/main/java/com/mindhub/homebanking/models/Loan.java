@@ -16,17 +16,13 @@ public class Loan {
     private String name;
     private Double maxAmount;
 
-
-
     @ElementCollection
     @Column(name="payments")
     private Set<Integer> payments = new HashSet<>();
 
     //relacion uno a muchos prestamo CientePrestamos
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
-    List<ClientLoan> clients = new ArrayList<>();
-
-
+    private List<ClientLoan> clients = new ArrayList<>();
 
     public Loan() {}
 
@@ -67,6 +63,5 @@ public class Loan {
     public List<ClientLoan> getClients() {
         return clients;
     }
-
 
 }

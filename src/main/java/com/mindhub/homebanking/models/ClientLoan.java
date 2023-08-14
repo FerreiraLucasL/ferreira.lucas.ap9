@@ -11,7 +11,7 @@ public class ClientLoan {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
-    private long id;
+    private Long id;
 
     //relacion muchos a uno clientes
     @ManyToOne(fetch = FetchType.EAGER)
@@ -35,7 +35,7 @@ public class ClientLoan {
         this.amount = amount;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
