@@ -27,9 +27,9 @@ public class AccountController {
     }
 
     @GetMapping("/accounts/{id}")
-    public Optional<Account> getAccount(@PathVariable Long id){
-
-        return accountRepository.findById(id);
+    public AccountDTO getAccount(@PathVariable Long id){
+        AccountDTO accountDto = new AccountDTO(accountRepository.getReferenceById(id));
+        return accountDto;
     }
 
 }
