@@ -22,7 +22,7 @@ public class Client {
     private String lastName;
     private String email;
 
-    @OneToMany(mappedBy = "clientId", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
     Set<Account> accounts = new HashSet<>();
 
 
@@ -72,7 +72,7 @@ public class Client {
 //metodos
     //agregar cuenta
     public void addAccount(Account account){
-        account.setClientId(this);
+        account.setClient(this);
         accounts.add(account);
     }
 

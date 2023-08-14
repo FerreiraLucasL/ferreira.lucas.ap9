@@ -19,7 +19,7 @@ public class ClientController {
     @Autowired
     //servicio que busca en la BD
     private ClientRepository clientRepository;
-    //peticion HTTP(get) para devolver todos los clientes
+    //peticion HTTP(get) para devolver todos los clientesDTO
     @GetMapping("/clients")
     public List<ClientDTO> getClients(){
         List<Client> clients = clientRepository.findAll();
@@ -27,10 +27,11 @@ public class ClientController {
                 map(client -> new ClientDTO(client)).collect(Collectors.toList());
         return convertedList;
     }
-    //peticion HTTP(get) para devolver 1 cliente
+    //peticion HTTP(get) para devolver 1 clienteDTO
     @GetMapping("/clients/{id}")
-    public Optional<Client> getClient(@PathVariable Long id){
-        return clientRepository.findById(id);
+    public ClientDTO getClient(@PathVariable Long id){
+        ClientDTO clientDTO = new ClientDTO(clientRepository.getReferenceById(id));
+        return clientDTO;
     }
 
 
