@@ -49,8 +49,8 @@ public class Transaction {
         return date;
     }
 
-    public Long getAccount() {
-        return account.getId();
+    public Account getAccount() {
+        return account;
     }
 
     public void setType(TransactionType type) {

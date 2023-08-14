@@ -1,5 +1,6 @@
 package com.mindhub.homebanking.dtos;
 
+import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Transaction;
 import com.mindhub.homebanking.models.TransactionType;
 
@@ -11,7 +12,7 @@ public class TransactionDTO {
     private Double amount;
     private String description;
     private LocalDate date;
-    private Long accountId;
+
 
     public TransactionDTO(Transaction transaction){
         id= transaction.getId();
@@ -19,7 +20,6 @@ public class TransactionDTO {
         amount= transaction.getAmount();
         description=transaction.getDescription();
         date=transaction.getDate();
-        accountId=transaction.getAccountId();
     }
 
     public Long getId() {
@@ -42,9 +42,6 @@ public class TransactionDTO {
         return date;
     }
 
-    public Long getAccountId() {
-        return accountId;
-    }
 
     public void setType(TransactionType type) {
         this.type = type;

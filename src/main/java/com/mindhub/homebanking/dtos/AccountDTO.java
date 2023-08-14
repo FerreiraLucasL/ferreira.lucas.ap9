@@ -12,7 +12,6 @@ public class AccountDTO {
     private String number;
     private LocalDate creationDate;
     private Double balance;
-    private Client client;
 
     private Set<TransactionDTO> transactions;
 
@@ -22,7 +21,6 @@ public class AccountDTO {
         number = account.getNumber();
         creationDate = account.getCreationDate();
         balance = account.getBalance();
-        client = account.getClient();
         this.transactions = account.getTransactions()
                 .stream().map(transaction -> new TransactionDTO(transaction))
                 .collect(Collectors.toSet());
@@ -44,9 +42,6 @@ public class AccountDTO {
         return balance;
     }
 
-    public Client getClient() {
-        return client;
-    }
 
     public Set<TransactionDTO> getTransactions() {
         return transactions;
