@@ -4,8 +4,6 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
-import static javax.persistence.FetchType.EAGER;
-
 @Entity
 public class ClientLoan {
     @Id
@@ -23,15 +21,15 @@ public class ClientLoan {
     @JoinColumn(name="loan_id")
     private Loan loan;
 
-    private Integer payments;
+    private Integer payment;
     private Double amount;
 
     public ClientLoan() {}
 
-    public ClientLoan(Client client, Loan loan, Integer payments, Double amount) {
+    public ClientLoan(Client client, Loan loan, Integer payment, Double amount) {
         this.client = client;
         this.loan = loan;
-        this.payments = payments;
+        this.payment = payment;
         this.amount = amount;
     }
 
@@ -43,12 +41,10 @@ public class ClientLoan {
         return client;
     }
 
-    public Loan getLoan() {
-        return loan;
-    }
+    public Loan getLoan() { return loan;  }
 
-    public Integer getPayments() {
-        return payments;
+    public Integer getPayment() {
+        return payment;
     }
 
     public Double getAmount() {
@@ -63,8 +59,8 @@ public class ClientLoan {
         this.loan = loan;
     }
 
-    public void setPayments(Integer payments) {
-        this.payments = payments;
+    public void setPayment(Integer payment) {
+        this.payment = payment;
     }
 
     public void setAmount(Double amount) {

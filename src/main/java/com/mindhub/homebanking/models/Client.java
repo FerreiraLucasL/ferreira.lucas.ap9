@@ -27,7 +27,7 @@ public class Client {
     private Set<Account> accounts = new HashSet<>();
 
     //relacion uno a muchos cliente CientePrestamos
-    @OneToMany(mappedBy = "loan", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
     private Set<ClientLoan> loans = new HashSet<>();
 
 //constructores
@@ -90,13 +90,7 @@ public class Client {
     public void addTransaction(Transaction transaction, Account account){
         account.addTransaction(transaction);
     }
-    public void ClientLoan( Loan loan, Integer payments, Double amount){
-        ClientLoan clientLoan = new ClientLoan();
-        clientLoan.setLoan(loan);
-        clientLoan.setClient(this);
-        clientLoan.setPayments(payments);
-        clientLoan.setAmount(amount);
 
-    }
+
 
 }

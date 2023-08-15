@@ -28,7 +28,8 @@ public class ClientController {
     //peticion HTTP(get) para devolver 1 clienteDTO
     @GetMapping("/clients/{id}")
     public ClientDTO getClient(@PathVariable Long id){
-        ClientDTO clientDTO = new ClientDTO(clientRepository.getReferenceById(id));
+        ClientDTO clientDTO = new ClientDTO(clientRepository.findById(id).orElse(null));
         return clientDTO;
+
     }
 }

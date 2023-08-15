@@ -44,9 +44,7 @@ public class HomebankingApplication {
 			Loan hipotecario = new Loan("Hipotecario",500000.0,cuotasHipotecario);
 			Loan personal = new Loan("Personal",100000.0,cuotasPersonal);
 			Loan automotriz = new Loan("Automotriz",300000.0,cuotasAutomotriz);
-			ClientLoan melbaHipotecario = new ClientLoan(client1, hipotecario, 60,400000.0);
-			ClientLoan melbaPersonal = new ClientLoan(client1, personal,12,50000.0);
-			ClientLoan pedroAutomotriz = new ClientLoan(client2, automotriz,24,150000.0);
+
 
 			//asignaciones
 			client1.addAccount(account1);
@@ -55,9 +53,6 @@ public class HomebankingApplication {
 			client1.addTransaction(transaction1,account1);
 			client1.addTransaction(transaction2,account2);
 			client2.addTransaction(transaction3,account3);
-			client1.ClientLoan(hipotecario,60,400000.0);
-			client1.ClientLoan(personal,12,50000.0);
-			client2.ClientLoan(automotriz,24,150000.0);
 
 			//persistencia
 			clientRepository.save(client1);
@@ -71,9 +66,14 @@ public class HomebankingApplication {
 			loanRepository.save(hipotecario);
 			loanRepository.save(automotriz);
 			loanRepository.save(personal);
+			ClientLoan melbaHipotecario = new ClientLoan(client1, hipotecario, 60,400000.0);
+			ClientLoan melbaPersonal = new ClientLoan(client1, personal,12,50000.0);
+			ClientLoan pedroPersonal = new ClientLoan(client2, personal,24,100000.0);
+			ClientLoan pedroAutomotriz = new ClientLoan(client2, automotriz,36,200000.0);
 			clientLoanRepository.save(melbaHipotecario);
 			clientLoanRepository.save(melbaPersonal);
 			clientLoanRepository.save(pedroAutomotriz);
+			clientLoanRepository.save(pedroPersonal);
 
 		};
 	}

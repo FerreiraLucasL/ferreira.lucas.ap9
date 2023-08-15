@@ -30,6 +30,7 @@ public class ClientLoanController {
             ClientLoanDTO clientLoanDTO = new ClientLoanDTO(clientLoanRepository.getReferenceById(id));
             return clientLoanDTO;
         }
+
     }
 
 
