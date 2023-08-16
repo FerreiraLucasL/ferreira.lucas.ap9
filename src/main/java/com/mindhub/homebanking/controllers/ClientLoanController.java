@@ -19,16 +19,12 @@ public class ClientLoanController {
         private ClientLoanRepository clientLoanRepository;
         @GetMapping("/clientLoans")
         public List<ClientLoanDTO> getClientLoans(){
-            List<ClientLoan> clientloans = clientLoanRepository.findAll();
-            List<ClientLoanDTO> convertedList = clientloans.stream()
-                    .map(clientLoan -> new ClientLoanDTO(clientLoan)).collect(Collectors.toList());
-            return convertedList;
+            return clientLoanRepository.findAll().stream().map(clientLoan -> new ClientLoanDTO(clientLoan)).collect(Collectors.toList());
         }
 
         @GetMapping("/clientLoans/{id}")
         public ClientLoanDTO getClientLoans(@PathVariable Long id){
-            ClientLoanDTO clientLoanDTO = new ClientLoanDTO(clientLoanRepository.getReferenceById(id));
-            return clientLoanDTO;
+            return new ClientLoanDTO(clientLoanRepository.findById(id).orElse(null));
         }
 
     }

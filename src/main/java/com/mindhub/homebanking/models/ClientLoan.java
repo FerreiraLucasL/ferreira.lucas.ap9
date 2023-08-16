@@ -26,9 +26,7 @@ public class ClientLoan {
 
     public ClientLoan() {}
 
-    public ClientLoan(Client client, Loan loan, Integer payment, Double amount) {
-        this.client = client;
-        this.loan = loan;
+    public ClientLoan(Integer payment, Double amount) {
         this.payment = payment;
         this.amount = amount;
     }
@@ -66,6 +64,8 @@ public class ClientLoan {
     public void setAmount(Double amount) {
         this.amount = amount;
     }
+
+
 
 
 }

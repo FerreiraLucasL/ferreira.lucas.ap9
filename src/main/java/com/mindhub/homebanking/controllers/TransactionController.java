@@ -20,14 +20,11 @@ public class TransactionController {
     private TransactionRepository transactionRepository;
     @GetMapping("/transactions")
     public List<TransactionDTO> getTransactions(){
-        List<Transaction> transactions = transactionRepository.findAll();
-        List<TransactionDTO> convertedList = transactions.stream().map(transaction -> new TransactionDTO(transaction)).collect(Collectors.toList());
-        return convertedList;
+        return transactionRepository.findAll().stream().map(transaction -> new TransactionDTO(transaction)).collect(Collectors.toList());
     }
 
     @GetMapping("/transactions/{id}")
     public TransactionDTO getTransaction(@PathVariable Long id){
-        TransactionDTO transactionDto = new TransactionDTO(transactionRepository.getReferenceById(id));
-        return transactionDto;
+        return new TransactionDTO(transactionRepository.getReferenceById(id));
     }
 }

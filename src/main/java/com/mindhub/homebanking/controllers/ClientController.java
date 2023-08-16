@@ -20,16 +20,11 @@ public class ClientController {
     //peticion HTTP(get) para devolver todos los clientesDTO
     @GetMapping("/clients")
     public List<ClientDTO> getClients(){
-        List<Client> clients = clientRepository.findAll();
-        List<ClientDTO> convertedList = clients.stream().
-                map(client -> new ClientDTO(client)).collect(Collectors.toList());
-        return convertedList;
+        return clientRepository.findAll().stream().map(client -> new ClientDTO(client)).collect(Collectors.toList());
     }
     //peticion HTTP(get) para devolver 1 clienteDTO
     @GetMapping("/clients/{id}")
     public ClientDTO getClient(@PathVariable Long id){
-        ClientDTO clientDTO = new ClientDTO(clientRepository.findById(id).orElse(null));
-        return clientDTO;
-
+        return new ClientDTO(clientRepository.findById(id).orElse(null));
     }
 }

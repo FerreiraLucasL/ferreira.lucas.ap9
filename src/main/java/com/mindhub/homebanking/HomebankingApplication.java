@@ -21,10 +21,11 @@ public class HomebankingApplication {
 	}
 	@Bean
 	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository,
-									  LoanRepository loanRepository, ClientLoanRepository clientLoanRepository){
+									  LoanRepository loanRepository, ClientLoanRepository clientLoanRepository, CardRepository cardRepository){
 		return (args) -> {
 			LocalDate today = LocalDate.now();
 			LocalDate tomorrow = today.plusDays(1);
+			LocalDate thruDate = today.plusYears(5);
 			Set<Integer> cuotasHipotecario = new HashSet<>() {};
 			cuotasHipotecario.addAll(Arrays.asList(new Integer[] {12,24,36,48,60}));
 			Set<Integer> cuotasPersonal = new HashSet<>() {};
@@ -44,7 +45,9 @@ public class HomebankingApplication {
 			Loan hipotecario = new Loan("Hipotecario",500000.0,cuotasHipotecario);
 			Loan personal = new Loan("Personal",100000.0,cuotasPersonal);
 			Loan automotriz = new Loan("Automotriz",300000.0,cuotasAutomotriz);
-
+			Card goldMelba = new Card(CardType.DEBIT,CardColor.GOLD,"9874-8495-8121-3215",987,"MELBAMOREL",today,thruDate,client1);
+			Card titaniumMelba = new Card(CardType.CREDIT,CardColor.TITANIUM,"9832-8412-6121-3815",877,"MELBAMOREL",today,thruDate,client1);
+			Card silverPedro = new Card(CardType.CREDIT,CardColor.SILVER,"9832-8412-6121-3816",171,"ALCARAZPEDRO",today,thruDate,client2);
 
 			//asignaciones
 			client1.addAccount(account1);
@@ -66,14 +69,32 @@ public class HomebankingApplication {
 			loanRepository.save(hipotecario);
 			loanRepository.save(automotriz);
 			loanRepository.save(personal);
-			ClientLoan melbaHipotecario = new ClientLoan(client1, hipotecario, 60,400000.0);
-			ClientLoan melbaPersonal = new ClientLoan(client1, personal,12,50000.0);
-			ClientLoan pedroPersonal = new ClientLoan(client2, personal,24,100000.0);
-			ClientLoan pedroAutomotriz = new ClientLoan(client2, automotriz,36,200000.0);
+
+			//solicitudes de prestamo
+			ClientLoan melbaHipotecario = new ClientLoan( 60,400000.0);
+			client1.addClientLoan(melbaHipotecario);
+			hipotecario.addClientLoan(melbaHipotecario);
 			clientLoanRepository.save(melbaHipotecario);
+
+			ClientLoan melbaPersonal = new ClientLoan(12,50000.0);
+			client1.addClientLoan(melbaPersonal);
+			personal.addClientLoan(melbaPersonal);
 			clientLoanRepository.save(melbaPersonal);
-			clientLoanRepository.save(pedroAutomotriz);
+
+			ClientLoan pedroPersonal = new ClientLoan(24,100000.0);
+			client2.addClientLoan(pedroPersonal);
+			personal.addClientLoan(pedroPersonal);
 			clientLoanRepository.save(pedroPersonal);
+
+			ClientLoan pedroAutomotriz = new ClientLoan(36,200000.0);
+			client2.addClientLoan(pedroAutomotriz);
+			automotriz.addClientLoan(pedroAutomotriz);
+			clientLoanRepository.save(pedroAutomotriz);
+
+			//Tarjetas
+			cardRepository.save(goldMelba);
+			cardRepository.save(titaniumMelba);
+			cardRepository.save(silverPedro);
 
 		};
 	}
