@@ -34,8 +34,8 @@ public class HomebankingApplication {
 			cuotasAutomotriz.addAll(Arrays.asList(new Integer[] {6,12,24,36}));
 
 			//carga de datos
-			Client client1 = new Client("Melba","Morel","melba@mindhub.com");
-			Client client2 = new Client("pedro","alcazar","aksdoakmsd@gmail.com");
+			Client client1 = new Client("Melba","Morel","melba@mindhub.com","Melba76.");
+			Client client2 = new Client("Pedro","Alcazar","aksdoakmsd@gmail.com","PedA1");
 			Account account1 = new Account("VIN001", 5000.0, today);
 			Account account2 = new Account("VIN002", 7000.0, tomorrow);
 			Account account3 = new Account("VIN003", 10000.0, today);

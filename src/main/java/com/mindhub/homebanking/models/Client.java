@@ -1,6 +1,8 @@
 package com.mindhub.homebanking.models;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,7 +15,7 @@ import javax.persistence.FetchType;
 
 @Entity
 public class Client {
-//atributos
+    //atributos
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
@@ -21,6 +23,10 @@ public class Client {
     private String firstName;
     private String lastName;
     private String email;
+    private String password;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 
     //relacion uno a muchos cliente cuentas
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
@@ -33,13 +39,15 @@ public class Client {
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
     private Set<Card> cards = new HashSet<>();
 
-//constructores
-    public Client(){}
+    //constructores
+    public Client() {
+    }
 
-    public Client(String firstName, String lastName, String email) {
+    public Client(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.password = passwordEncoder.encode(password);
     }
 
     //getters
@@ -71,6 +79,10 @@ public class Client {
         return cards;
     }
 
+    public String getPassword() {
+        return passwordEncoder.encode(password);
+    }
+
     //setters
     public void setFirstName(String firstName) {
         this.firstName = firstName;
@@ -84,10 +96,9 @@ public class Client {
         this.email = email;
     }
 
+    public void setPassword(String password) { this.password = passwordEncoder.encode(password);     }
 
-
-
-//metodos
+    //metodos
     //agregar cuenta
     public void addAccount(Account account){
         account.setClientId(this);
