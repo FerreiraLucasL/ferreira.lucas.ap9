@@ -29,11 +29,15 @@ public class WebAuthentication extends GlobalAuthenticationConfigurerAdapter {
 // acá podria preguntar por email especificamente y dar autorizacion de user o admin a ese mail
 
            if (client != null) {
-               return new User(client.getEmail(), client.getPassword(),
-                       AuthorityUtils.createAuthorityList("USER"));
+               if (client.getEmail().equals("admin@mindhub.com")) {
+                   return new User(client.getEmail(), client.getPassword(), AuthorityUtils.createAuthorityList("ADMIN"));
+               } else {
+                   return new User(client.getEmail(), client.getPassword(),
+                           AuthorityUtils.createAuthorityList("USER"));
+               }
            } else {
-               throw new UsernameNotFoundException("Unknown user: " + inputName);
-           }
+                   throw new UsernameNotFoundException("Unknown user: " + inputName);
+               }
        });
    }
 

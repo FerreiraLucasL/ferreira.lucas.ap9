@@ -11,11 +11,15 @@ public class WebAuthorization extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/**").hasAuthority("USER");
+                .antMatchers("/web/index.html").permitAll()
+                .antMatchers("/api/**").hasAuthority("ADMIN")
+                .antMatchers("/rest/**").hasAuthority("ADMIN")
+                .antMatchers("/h2-console").hasAuthority("ADMIN");
         http.formLogin()
                 .usernameParameter("email")
                 .passwordParameter("password")
-                .loginPage("/app/login");
-        http.logout().logoutUrl("/app/logout");
+                .loginPage("http://localhost:8080/web/index.html");
+        http.logout().logoutUrl("/api/logout");
+        http.csrf().disable();
     }
 }

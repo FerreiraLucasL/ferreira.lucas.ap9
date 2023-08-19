@@ -23,8 +23,7 @@ public class HomebankingApplication {
 		SpringApplication.run(HomebankingApplication.class, args);
 	}
 	@Autowired
-	PasswordEncoder passwordEncoder;
-
+	private PasswordEncoder passwordEncoder;
 	@Bean
 	public CommandLineRunner initData(ClientRepository clientRepository,
 									  AccountRepository accountRepository,
@@ -46,7 +45,8 @@ public class HomebankingApplication {
 
 			//carga de datos
 			Client client1 = new Client("Melba","Morel","melba@mindhub.com", passwordEncoder.encode("Melba76."));
-			Client client2 = new Client("Pedro","Alcazar","aksdoakmsd@gmail.com","PedA1");
+			Client client2 = new Client("Pedro","Alcazar","PedAlc@gmail.com",passwordEncoder.encode("PedA1"));
+			Client clientA = new Client("Jorge","DelSoto","admin@mindhub.com",passwordEncoder.encode("admin"));
 			Account account1 = new Account("VIN001", 5000.0, today);
 			Account account2 = new Account("VIN002", 7000.0, tomorrow);
 			Account account3 = new Account("VIN003", 10000.0, today);
@@ -80,6 +80,10 @@ public class HomebankingApplication {
 			loanRepository.save(hipotecario);
 			loanRepository.save(automotriz);
 			loanRepository.save(personal);
+			//Tarjetas
+			cardRepository.save(goldMelba);
+			cardRepository.save(titaniumMelba);
+			cardRepository.save(silverPedro);
 
 			//solicitudes de prestamo
 			ClientLoan melbaHipotecario = new ClientLoan( 60,400000.0);
@@ -101,11 +105,6 @@ public class HomebankingApplication {
 			client2.addClientLoan(pedroAutomotriz);
 			automotriz.addClientLoan(pedroAutomotriz);
 			clientLoanRepository.save(pedroAutomotriz);
-
-			//Tarjetas
-			cardRepository.save(goldMelba);
-			cardRepository.save(titaniumMelba);
-			cardRepository.save(silverPedro);
 
 		};
 	}
