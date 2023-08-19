@@ -7,6 +7,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+
 import java.time.LocalDate;
 import java.util.*;
 
@@ -16,12 +20,18 @@ import static com.mindhub.homebanking.models.TransactionType.DEBIT;
 public class HomebankingApplication {
 
 	public static void main(String[] args) {
-		//
 		SpringApplication.run(HomebankingApplication.class, args);
 	}
+	@Autowired
+	PasswordEncoder passwordEncoder;
+
 	@Bean
-	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository,
-									  LoanRepository loanRepository, ClientLoanRepository clientLoanRepository, CardRepository cardRepository){
+	public CommandLineRunner initData(ClientRepository clientRepository,
+									  AccountRepository accountRepository,
+									  TransactionRepository transactionRepository,
+									  LoanRepository loanRepository,
+									  ClientLoanRepository clientLoanRepository,
+									  CardRepository cardRepository){
 		return (args) -> {
 			LocalDate today = LocalDate.now();
 			LocalDate tomorrow = today.plusDays(1);
@@ -33,8 +43,9 @@ public class HomebankingApplication {
 			Set<Integer> cuotasAutomotriz = new HashSet<>() {};
 			cuotasAutomotriz.addAll(Arrays.asList(new Integer[] {6,12,24,36}));
 
+
 			//carga de datos
-			Client client1 = new Client("Melba","Morel","melba@mindhub.com","Melba76.");
+			Client client1 = new Client("Melba","Morel","melba@mindhub.com", passwordEncoder.encode("Melba76."));
 			Client client2 = new Client("Pedro","Alcazar","aksdoakmsd@gmail.com","PedA1");
 			Account account1 = new Account("VIN001", 5000.0, today);
 			Account account2 = new Account("VIN002", 7000.0, tomorrow);

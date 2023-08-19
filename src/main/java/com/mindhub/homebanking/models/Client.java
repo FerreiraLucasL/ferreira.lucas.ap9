@@ -1,9 +1,6 @@
 package com.mindhub.homebanking.models;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,8 +21,6 @@ public class Client {
     private String lastName;
     private String email;
     private String password;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
 
     //relacion uno a muchos cliente cuentas
@@ -47,7 +42,7 @@ public class Client {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.password = passwordEncoder.encode(password);
+        this.password = password;
     }
 
     //getters
@@ -80,7 +75,7 @@ public class Client {
     }
 
     public String getPassword() {
-        return passwordEncoder.encode(password);
+        return password;
     }
 
     //setters
@@ -96,7 +91,7 @@ public class Client {
         this.email = email;
     }
 
-    public void setPassword(String password) { this.password = passwordEncoder.encode(password);     }
+    public void setPassword(String password) { this.password = password;     }
 
     //metodos
     //agregar cuenta
