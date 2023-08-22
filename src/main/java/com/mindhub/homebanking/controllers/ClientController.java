@@ -4,6 +4,7 @@ import com.mindhub.homebanking.dtos.ClientDTO;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,4 +28,10 @@ public class ClientController {
     public ClientDTO getClient(@PathVariable Long id){
         return new ClientDTO(clientRepository.findById(id).orElse(null));
     }
+    @RequestMapping(path = "/clients/current")
+    public ClientDTO getClientByEmail(Authentication authentication){
+        return new ClientDTO(clientRepository.findByEmail(authentication.getName()));
+    }
+
+
 }

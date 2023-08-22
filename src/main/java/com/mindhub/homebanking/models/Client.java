@@ -61,6 +61,9 @@ public class Client {
     public String getEmail() {
         return email;
     }
+    public String getPassword() {
+        return password;
+    }
 
     public Set<Account> getAccounts() {
         return accounts;
@@ -74,9 +77,6 @@ public class Client {
         return cards;
     }
 
-    public String getPassword() {
-        return password;
-    }
 
     //setters
     public void setFirstName(String firstName) {

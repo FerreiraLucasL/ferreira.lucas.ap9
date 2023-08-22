@@ -19,7 +19,7 @@ import static com.mindhub.homebanking.models.TransactionType.DEBIT;
 @SpringBootApplication
 public class HomebankingApplication {
 	@Autowired
-	private PasswordEncoder passwordEncoder;
+	PasswordEncoder passwordEncoder;
 	public static void main(String[] args) {
 		SpringApplication.run(HomebankingApplication.class, args);
 	}
@@ -71,6 +71,7 @@ public class HomebankingApplication {
 			//persistencia
 			clientRepository.save(client1);
 			clientRepository.save(client2);
+			clientRepository.save(clientA);
 			accountRepository.save(account1);
 			accountRepository.save(account2);
 			accountRepository.save(account3);
