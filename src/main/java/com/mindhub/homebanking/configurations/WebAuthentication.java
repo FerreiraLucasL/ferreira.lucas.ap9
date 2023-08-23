@@ -28,7 +28,7 @@ public class WebAuthentication extends GlobalAuthenticationConfigurerAdapter {
            Client client = clientRepository.findByEmail(inputName);
 // acá podria preguntar por email especificamente y dar autorizacion de user o admin a ese mail
            if (client != null) {
-               if (client.getEmail().equals("admin@mindhub.com")) {
+               if (client.getEmail().equalsIgnoreCase("admin@mindhub.com")) {
                    return new User(client.getEmail(), client.getPassword(), AuthorityUtils.createAuthorityList("ADMIN"));
                } else {
                    return new User(client.getEmail(), client.getPassword(),

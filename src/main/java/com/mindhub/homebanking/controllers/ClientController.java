@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
@@ -21,18 +22,31 @@ public class ClientController {
     @Autowired
     //servicio que busca en la BD
     private ClientRepository clientRepository;
-    //peticion HTTP(get) para devolver todos los clientesDTO
+    //peticion HTTP(get) para devolver todos los clientesDTO * devolver soolo el cliente actual por cuestiones de seguridad :D
+
     @GetMapping("/clients")
-    public List<ClientDTO> getClients(){
-        return clientRepository.findAll().stream().map(client -> new ClientDTO(client)).collect(Collectors.toList());
+    public ClientDTO getClients(Authentication authentication){
+//        return clientRepository.findAll().stream().map(client -> new ClientDTO(client)).collect(Collectors.toList());
+        ClientDTO current = getCurrent(authentication);
+        return current;
     }
-    //peticion HTTP(get) para devolver 1 clienteDTO
+    //peticion HTTP(get) para devolver 1 clienteDTO, si el que solicita es el dueño de esa informacion
     @GetMapping("/clients/{id}")
-    public ClientDTO getClient(@PathVariable Long id){
-        return new ClientDTO(clientRepository.findById(id).orElse(null));
+    public ResponseEntity<Object> getClient(@PathVariable Long id, Authentication authentication){
+        Client client = clientRepository.getReferenceById(id);
+        Client current = clientRepository.findByEmail(authentication.getName());
+        if (client != null) {
+            if (client.equals(current)) {
+                return new ResponseEntity<>(new ClientDTO(client), HttpStatus.FOUND);
+            } else {
+                return new ResponseEntity<>("La informacion que intenta acceder está fuera de su alcance", HttpStatus.I_AM_A_TEAPOT);
+            }
+        }else{
+            return new ResponseEntity<>("cliente no existe", HttpStatus.BAD_REQUEST);
+        }
     }
     @RequestMapping(path = "/clients/current")
-    public ClientDTO getClientByEmail(Authentication authentication){
+    public ClientDTO getCurrent(Authentication authentication){
         return new ClientDTO(clientRepository.findByEmail(authentication.getName()));
     }
 

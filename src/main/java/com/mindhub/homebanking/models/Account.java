@@ -54,8 +54,8 @@ public class Account {
         return balance;
     }
 
-    public Long getClientId() {
-        return client.getId();
+    public Client getClient() {
+        return client;
     }
 
     public Set<Transaction> getTransactions() {
