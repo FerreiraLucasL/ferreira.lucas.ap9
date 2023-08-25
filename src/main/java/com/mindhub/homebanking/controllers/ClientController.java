@@ -1,6 +1,7 @@
 package com.mindhub.homebanking.controllers;
 
 import com.mindhub.homebanking.dtos.ClientDTO;
+import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,7 @@ public class ClientController {
     }
 
     @RequestMapping(path = "/clients/register", method = RequestMethod.POST)
-    public ResponseEntity<Client> register(
+    public ResponseEntity<Object> register(
             @RequestParam String firstName,
             @RequestParam String lastName,
             @RequestParam String email,

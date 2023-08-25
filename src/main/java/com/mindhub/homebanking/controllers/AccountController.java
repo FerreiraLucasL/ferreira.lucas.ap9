@@ -9,13 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @RestController
@@ -47,5 +44,25 @@ public class AccountController {
         }
     }
 
+    @RequestMapping(path = "/clients/current/account", method = RequestMethod.POST)
+    public ResponseEntity<?> createAccount(Authentication authentication){
+
+ /*       if (authentication!=null){
+            return new ResponseEntity<>(HttpStatus.CREATED);    
+        }else{
+            return new ResponseEntity<>("no está logueado",HttpStatus.FORBIDDEN);
+        }*/
+        return new ResponseEntity<>(createAccountNumber(), HttpStatus.FOUND);
+    }
+
+    //crear numero aleatorio de cuenta
+    public String createAccountNumber(){
+        String number;
+        Random randomcito = new Random();
+        do {
+            number = "VIN" + String.valueOf(randomcito.nextInt(99999999));
+        }while (accountRepository.existsByNumber(number));
+        return number;
+    }
 
 }

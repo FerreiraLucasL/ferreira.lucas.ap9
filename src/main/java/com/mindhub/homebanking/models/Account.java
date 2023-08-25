@@ -31,6 +31,13 @@ public class Account {
 //constructores
     public Account() {}
 
+    public Account(Client client, String number) {
+        this.client = client;
+        this.creationDate = LocalDate.now();
+        this.balance = 0.0;
+        this.number =  number;
+    }
+
     public Account(String number, Double balance, LocalDate date) {
         this.number = number;
         this.creationDate = date;
@@ -80,4 +87,6 @@ public class Account {
         transaction.setAccount(this);
         transactions.add(transaction);
     }
+
+
 }
