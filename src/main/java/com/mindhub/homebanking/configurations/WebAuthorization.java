@@ -29,7 +29,7 @@ public class WebAuthorization {
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .loginPage("/api/login");
-        http.logout().logoutUrl("/api/logout");
+        http.logout().logoutUrl("/api/logout").deleteCookies("JSESSIONID");
         http.csrf().disable();
         // if user is not authenticated, just send an authentication failure response
         http.exceptionHandling().authenticationEntryPoint((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));

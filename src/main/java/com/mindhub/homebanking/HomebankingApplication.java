@@ -47,9 +47,10 @@ public class HomebankingApplication {
 			Client client1 = new Client("Melba","Morel","melba@mindhub.com", passwordEncoder.encode("Melba76."));
 			Client client2 = new Client("Pedro","Alcazar","PedAlc@gmail.com",passwordEncoder.encode("PedA1"));
 			Client clientA = new Client("Jorge","DelSoto","admin@mindhub.com",passwordEncoder.encode("admin"));
-			Account account1 = new Account("VIN001", 5000.0, today);
-			Account account2 = new Account("VIN002", 7000.0, tomorrow);
-			Account account3 = new Account("VIN003", 10000.0, today);
+			Account account1 = new Account("VIN11168129", 5000.0, today); //1
+			Account account2 = new Account("VIN23929072", 7000.0, tomorrow);
+			Account account3 = new Account("VIN15621506", 10000.0, today);
+
 			Transaction transaction1 = new Transaction(TransactionType.DEBIT, 10000.0, "lorem ipsum :v ", today);
 			Transaction transaction2 = new Transaction(TransactionType.CREDIT, 5000.0, "lorem ipsum :v ", today);
 			Transaction transaction3 = new Transaction(TransactionType.CREDIT, 3000.0, "lorem ipsum :v ", today);
@@ -61,8 +62,9 @@ public class HomebankingApplication {
 			Card silverPedro = new Card(CardType.CREDIT,CardColor.SILVER,"9832-8412-6121-3816",171,"ALCARAZPEDRO",today,thruDate,client2);
 
 			//asignaciones
-			client1.addAccount(account1);
+			client1.addAccount(account1); //2
 			client1.addAccount(account2);
+
 			client2.addAccount(account3);
 			client1.addTransaction(transaction1,account1);
 			client1.addTransaction(transaction2,account2);
@@ -72,9 +74,10 @@ public class HomebankingApplication {
 			clientRepository.save(client1);
 			clientRepository.save(client2);
 			clientRepository.save(clientA);
-			accountRepository.save(account1);
+			accountRepository.save(account1); //3
 			accountRepository.save(account2);
 			accountRepository.save(account3);
+
 			transactionRepository.save(transaction1);
 			transactionRepository.save(transaction2);
 			transactionRepository.save(transaction3);
