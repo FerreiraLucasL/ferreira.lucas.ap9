@@ -1,6 +1,8 @@
 package com.mindhub.homebanking.models;
 
 import org.hibernate.annotations.GenericGenerator;
+
+import java.time.LocalDateTime;
 import java.util.Random;
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -16,8 +18,8 @@ public class Card {
     private String number;
     private int ccv;
     private String cardHolder;
-    private LocalDate fromDate;
-    private LocalDate thruDate;
+    private LocalDateTime fromDate;
+    private LocalDateTime thruDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
@@ -26,7 +28,7 @@ public class Card {
     public Card() {}
 
     public Card(CardType type, CardColor color, String number, Client client) {
-        LocalDate today = LocalDate.now();
+        LocalDateTime today = LocalDateTime.now();
         Random randomcito = new Random();
         this.type = type;
         this.color = color;
@@ -36,9 +38,10 @@ public class Card {
         this.cardHolder = (client.getFirstName() + " " + client.getLastName().toUpperCase()) ;
         this.fromDate= today;
         this.thruDate = today.plusYears(5);
+        client.getCards().add(this);
     }
 
-    public Card(CardType type, CardColor color, String number, int ccv, String cardHolder, LocalDate fromDate, LocalDate thruDate, Client client) {
+    public Card(CardType type, CardColor color, String number, int ccv, String cardHolder, LocalDateTime fromDate, LocalDateTime thruDate, Client client) {
         this.type = type;
         this.color = color;
         this.number = number;
@@ -73,11 +76,11 @@ public class Card {
         return cardHolder;
     }
 
-    public LocalDate getFromDate() {
+    public LocalDateTime getFromDate() {
         return fromDate;
     }
 
-    public LocalDate getThruDate() {
+    public LocalDateTime getThruDate() {
         return thruDate;
     }
 
@@ -105,11 +108,11 @@ public class Card {
         this.cardHolder = cardHolder;
     }
 
-    public void setFromDate(LocalDate fromDate) {
+    public void setFromDate(LocalDateTime fromDate) {
         this.fromDate = fromDate;
     }
 
-    public void setThruDate(LocalDate thruDate) {
+    public void setThruDate(LocalDateTime thruDate) {
         this.thruDate = thruDate;
     }
 

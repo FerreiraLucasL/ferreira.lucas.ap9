@@ -5,6 +5,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,7 +17,7 @@ public class Account {
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
     private String number;
-    private LocalDate creationDate;
+    private LocalDateTime creationDate;
     private Double balance;
 
 //relacion client cuentas
@@ -33,12 +34,12 @@ public class Account {
 
     public Account(Client client, String number) {
         this.client = client;
-        this.creationDate = LocalDate.now();
+        this.creationDate = LocalDateTime.now();
         this.balance = 0.0;
         this.number =  number;
     }
 
-    public Account(String number, Double balance, LocalDate date) {
+    public Account(String number, Double balance, LocalDateTime date) {
         this.number = number;
         this.creationDate = date;
         this.balance = balance;
@@ -53,7 +54,7 @@ public class Account {
         return number;
     }
 
-    public LocalDate getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 

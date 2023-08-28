@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static com.mindhub.homebanking.models.TransactionType.DEBIT;
@@ -32,9 +33,9 @@ public class HomebankingApplication {
 									  ClientLoanRepository clientLoanRepository,
 									  CardRepository cardRepository){
 		return (args) -> {
-			LocalDate today = LocalDate.now();
-			LocalDate tomorrow = today.plusDays(1);
-			LocalDate thruDate = today.plusYears(5);
+			LocalDateTime today = LocalDateTime.now();
+			LocalDateTime tomorrow = today.plusDays(1);
+			LocalDateTime thruDate = today.plusYears(5);
 			Set<Integer> cuotasHipotecario = new HashSet<>() {};
 			cuotasHipotecario.addAll(Arrays.asList(new Integer[] {12,24,36,48,60}));
 			Set<Integer> cuotasPersonal = new HashSet<>() {};
@@ -50,10 +51,6 @@ public class HomebankingApplication {
 			Account account1 = new Account("VIN11168129", 5000.0, today); //1
 			Account account2 = new Account("VIN23929072", 7000.0, tomorrow);
 			Account account3 = new Account("VIN15621506", 10000.0, today);
-
-			Transaction transaction1 = new Transaction(TransactionType.DEBIT, 10000.0, "lorem ipsum :v ", today);
-			Transaction transaction2 = new Transaction(TransactionType.CREDIT, 5000.0, "lorem ipsum :v ", today);
-			Transaction transaction3 = new Transaction(TransactionType.CREDIT, 3000.0, "lorem ipsum :v ", today);
 			Loan hipotecario = new Loan("Hipotecario",500000.0,cuotasHipotecario);
 			Loan personal = new Loan("Personal",100000.0,cuotasPersonal);
 			Loan automotriz = new Loan("Automotriz",300000.0,cuotasAutomotriz);
@@ -62,13 +59,10 @@ public class HomebankingApplication {
 			Card silverPedro = new Card(CardType.CREDIT,CardColor.SILVER,"9832-8412-6121-3816",171,"ALCARAZPEDRO",today,thruDate,client2);
 
 			//asignaciones
+
 			client1.addAccount(account1); //2
 			client1.addAccount(account2);
-
 			client2.addAccount(account3);
-			client1.addTransaction(transaction1,account1);
-			client1.addTransaction(transaction2,account2);
-			client2.addTransaction(transaction3,account3);
 
 			//persistencia
 			clientRepository.save(client1);
@@ -77,13 +71,10 @@ public class HomebankingApplication {
 			accountRepository.save(account1); //3
 			accountRepository.save(account2);
 			accountRepository.save(account3);
-
-			transactionRepository.save(transaction1);
-			transactionRepository.save(transaction2);
-			transactionRepository.save(transaction3);
 			loanRepository.save(hipotecario);
 			loanRepository.save(automotriz);
 			loanRepository.save(personal);
+
 			//Tarjetas
 			cardRepository.save(goldMelba);
 			cardRepository.save(titaniumMelba);

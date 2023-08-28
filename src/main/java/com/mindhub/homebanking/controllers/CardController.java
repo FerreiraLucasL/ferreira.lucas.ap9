@@ -36,9 +36,14 @@ public class CardController {
                                               @RequestParam CardColor cardColor,
                                               Authentication authentication){
         Client client = clientRepository.findByEmail(authentication.getName());
-        //mejor si pregunto nomas que tipo de tarjeta y color tengo, sino existe puedo crearla.
-
-    return new ResponseEntity<>(createCardNumber(), HttpStatus.OK);
+        //check si existe una tarjeta de ese color y tipo, sino la puede crear
+        if( (client.getCards().stream().filter(card -> card.getType().equals(cardType)).filter(card -> card.getColor().equals(cardColor)).
+                collect(Collectors.toSet()).isEmpty())) {
+            cardRepository.save(new Card(cardType,cardColor,createCardNumber(),client));
+            return new ResponseEntity<>(createCardNumber(), HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>("ya existe una tarjeta de:" +cardType+ " de color" + cardColor, HttpStatus.FORBIDDEN);
+        }
     }
 
         public String createCardNumber(){
