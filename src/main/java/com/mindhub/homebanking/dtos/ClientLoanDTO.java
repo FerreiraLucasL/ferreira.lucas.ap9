@@ -24,7 +24,7 @@ public class ClientLoanDTO {
         return name;
     }
 
-    public Integer getPayment() {
+    public Integer getPayments() {
         return payments;
     }
 

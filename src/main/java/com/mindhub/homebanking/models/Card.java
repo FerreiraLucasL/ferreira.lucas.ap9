@@ -1,7 +1,7 @@
 package com.mindhub.homebanking.models;
 
 import org.hibernate.annotations.GenericGenerator;
-
+import java.util.Random;
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -24,6 +24,19 @@ public class Card {
     private Client client;
 
     public Card() {}
+
+    public Card(CardType type, CardColor color, String number, Client client) {
+        LocalDate today = LocalDate.now();
+        Random randomcito = new Random();
+        this.type = type;
+        this.color = color;
+        this.number = number;
+        this.ccv = randomcito.nextInt(999);
+        this.client = client;
+        this.cardHolder = (client.getFirstName() + " " + client.getLastName().toUpperCase()) ;
+        this.fromDate= today;
+        this.thruDate = today.plusYears(5);
+    }
 
     public Card(CardType type, CardColor color, String number, int ccv, String cardHolder, LocalDate fromDate, LocalDate thruDate, Client client) {
         this.type = type;
