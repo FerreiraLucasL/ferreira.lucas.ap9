@@ -1,5 +1,6 @@
 package com.mindhub.homebanking.controllers;
 
+import com.mindhub.homebanking.dtos.AccountDTO;
 import com.mindhub.homebanking.dtos.CardDTO;
 import com.mindhub.homebanking.models.Card;
 import com.mindhub.homebanking.models.CardColor;
@@ -23,8 +24,9 @@ public class CardController {
     @Autowired private CardRepository cardRepository;
     @Autowired private ClientRepository clientRepository;
     @GetMapping("/cards")
-    public List<CardDTO> getCards(){
-        return cardRepository.findAll().stream().map(card -> new CardDTO(card)).collect(Collectors.toList());
+    public List<CardDTO> getCards(Authentication authentication){
+            Client client = clientRepository.findByEmail(authentication.getName());
+            return client.getCards().stream().map(card -> new CardDTO(card)).collect(Collectors.toList());
     }
     @GetMapping("cards/{id}")
     public CardDTO getCard(@PathVariable Long id){
