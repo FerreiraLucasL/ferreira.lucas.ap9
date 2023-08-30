@@ -28,7 +28,18 @@ public class CardController {
             Client client = clientRepository.findByEmail(authentication.getName());
             return client.getCards().stream().map(card -> new CardDTO(card)).collect(Collectors.toList());
     }
-    @GetMapping("cards/{id}")
+
+    @GetMapping("/cards/{id}")
+    public ResponseEntity<Object> getCards(@PathVariable Long id, Authentication authentication) {
+        Client client = clientRepository.findByEmail(authentication.getName());
+        Card card = cardRepository.findById(id).orElse(null);
+        if ((client != null) && (card != null) && (card.getClient().equals(client))) {
+            return new ResponseEntity<>(new CardDTO(card), HttpStatus.FOUND);
+        } else {
+            return new ResponseEntity<>("tarjeta no existe o no le pertenece", HttpStatus.NOT_FOUND);
+        }
+    }
+
     public CardDTO getCard(@PathVariable Long id){
         return new CardDTO(cardRepository.findById(id).orElse(null));
     }
