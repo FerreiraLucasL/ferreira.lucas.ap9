@@ -43,7 +43,6 @@ public class HomebankingApplication {
 			Set<Integer> cuotasAutomotriz = new HashSet<>() {};
 			cuotasAutomotriz.addAll(Arrays.asList(new Integer[] {6,12,24,36}));
 
-
 			//carga de datos
 			Client client1 = new Client("Melba","Morel","melba@mindhub.com", passwordEncoder.encode("Melba76."));
 			Client client2 = new Client("Pedro","Alcazar","PedAlc@gmail.com",passwordEncoder.encode("PedA1"));
@@ -54,13 +53,9 @@ public class HomebankingApplication {
 			Loan hipotecario = new Loan("Hipotecario",500000.0,cuotasHipotecario);
 			Loan personal = new Loan("Personal",100000.0,cuotasPersonal);
 			Loan automotriz = new Loan("Automotriz",300000.0,cuotasAutomotriz);
-			Card goldMelba = new Card(CardType.DEBIT,CardColor.GOLD,"9874-8495-8121-3215",987,"MELBAMOREL",today,thruDate,client1);
-			Card titaniumMelba = new Card(CardType.CREDIT,CardColor.TITANIUM,"9832-8412-6121-3815",877,"MELBAMOREL",today,thruDate,client1);
-			Card silverPedro = new Card(CardType.CREDIT,CardColor.SILVER,"9832-8412-6121-3816",171,"ALCARAZPEDRO",today,thruDate,client2);
 
 			//asignaciones
-
-			client1.addAccount(account1); //2
+			client1.addAccount(account1);
 			client1.addAccount(account2);
 			client2.addAccount(account3);
 
@@ -74,11 +69,6 @@ public class HomebankingApplication {
 			loanRepository.save(hipotecario);
 			loanRepository.save(automotriz);
 			loanRepository.save(personal);
-
-			//Tarjetas
-			cardRepository.save(goldMelba);
-			cardRepository.save(titaniumMelba);
-			cardRepository.save(silverPedro);
 
 			//solicitudes de prestamo
 			ClientLoan melbaHipotecario = new ClientLoan( 60,400000.0);
@@ -100,9 +90,6 @@ public class HomebankingApplication {
 			client2.addClientLoan(pedroAutomotriz);
 			automotriz.addClientLoan(pedroAutomotriz);
 			clientLoanRepository.save(pedroAutomotriz);
-
-
-
 
 		};
 	}

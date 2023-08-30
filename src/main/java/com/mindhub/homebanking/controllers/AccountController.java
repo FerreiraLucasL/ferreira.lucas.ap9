@@ -21,7 +21,7 @@ public class AccountController {
     @Autowired private AccountRepository accountRepository;
     @Autowired private ClientRepository clientRepository;
     //endpoint cuentas, desde task 7 solo se muestran las cuentas del cliente logueado
-    @GetMapping("/accounts")
+    @GetMapping("/clients/current/accounts")
     public List<AccountDTO> getAccounts(Authentication authentication){
         Client client = clientRepository.findByEmail(authentication.getName());
         return client.getAccounts().stream().map(account -> new AccountDTO(account)).collect(Collectors.toList());
