@@ -90,8 +90,6 @@ public class HomebankingApplication {
 			client2.addClientLoan(pedroAutomotriz);
 			automotriz.addClientLoan(pedroAutomotriz);
 			clientLoanRepository.save(pedroAutomotriz);
-
 		};
 	}
-
 }
