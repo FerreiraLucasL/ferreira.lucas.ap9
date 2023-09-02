@@ -8,13 +8,13 @@ public class LoanDTO {
     private String name;
     private Double maxAmount;
 
-    private Set<Integer> payment;
+    private Set<Integer> payments;
 
     public LoanDTO(Loan loan){
         id= loan.getId();
         name=loan.getName();
         maxAmount= loan.getMaxAmount();
-        payment =loan.getPayments();
+        payments =loan.getPayments();
     }
 
     public Long getId() {
@@ -29,8 +29,8 @@ public class LoanDTO {
         return maxAmount;
     }
 
-    public Set<Integer> getPayment() {
-        return payment;
+    public Set<Integer> getPayments() {
+        return payments;
     }
 
     public void setName(String name) {
@@ -41,7 +41,7 @@ public class LoanDTO {
         this.maxAmount = maxAmount;
     }
 
-    public void setPayment(Set<Integer> payment) {
-        this.payment = payment;
+    public void setPayments(Set<Integer> payment) {
+        this.payments = payments;
     }
 }

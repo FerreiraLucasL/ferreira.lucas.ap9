@@ -22,6 +22,14 @@ public class Transaction {
 
     public Transaction() {}
 
+    public Transaction(TransactionType type, Double amount, Account account, String description) {
+        this.type = type;
+        this.amount = amount;
+        this.account = account;
+        this.description = description;
+        this.date = LocalDateTime.now();
+    }
+
     public Transaction(TransactionType type, Double amount, String description, LocalDateTime date) {
         this.type = type;
         this.amount = amount;

@@ -21,13 +21,13 @@ public class ClientLoan {
     @JoinColumn(name="loan_id")
     private Loan loan;
 
-    private Integer payment;
+    private Integer payments;
     private Double amount;
 
     public ClientLoan() {}
 
-    public ClientLoan(Integer payment, Double amount) {
-        this.payment = payment;
+    public ClientLoan(Integer payments, Double amount) {
+        this.payments = payments;
         this.amount = amount;
     }
 
@@ -41,8 +41,8 @@ public class ClientLoan {
 
     public Loan getLoan() { return loan;  }
 
-    public Integer getPayment() {
-        return payment;
+    public Integer getPayments() {
+        return payments;
     }
 
     public Double getAmount() {
@@ -57,8 +57,8 @@ public class ClientLoan {
         this.loan = loan;
     }
 
-    public void setPayment(Integer payment) {
-        this.payment = payment;
+    public void setPayments(Integer payment) {
+        this.payments = payment;
     }
 
     public void setAmount(Double amount) {
