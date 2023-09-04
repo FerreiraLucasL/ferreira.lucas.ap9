@@ -70,26 +70,7 @@ public class HomebankingApplication {
 			loanRepository.save(automotriz);
 			loanRepository.save(personal);
 
-			//solicitudes de prestamo
-			ClientLoan melbaHipotecario = new ClientLoan( 60,400000.0);
-			client1.addClientLoan(melbaHipotecario);
-			hipotecario.addClientLoan(melbaHipotecario);
-			clientLoanRepository.save(melbaHipotecario);
 
-			ClientLoan melbaPersonal = new ClientLoan(12,50000.0);
-			client1.addClientLoan(melbaPersonal);
-			personal.addClientLoan(melbaPersonal);
-			clientLoanRepository.save(melbaPersonal);
-
-			ClientLoan pedroPersonal = new ClientLoan(24,100000.0);
-			client2.addClientLoan(pedroPersonal);
-			personal.addClientLoan(pedroPersonal);
-			clientLoanRepository.save(pedroPersonal);
-
-			ClientLoan pedroAutomotriz = new ClientLoan(36,200000.0);
-			client2.addClientLoan(pedroAutomotriz);
-			automotriz.addClientLoan(pedroAutomotriz);
-			clientLoanRepository.save(pedroAutomotriz);
 		};
 	}
 }

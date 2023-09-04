@@ -1,6 +1,7 @@
 package com.mindhub.homebanking.controllers;
 
 import com.mindhub.homebanking.dtos.ClientLoanDTO;
+import com.mindhub.homebanking.dtos.LoanAplicationDTO;
 import com.mindhub.homebanking.models.*;
 import com.mindhub.homebanking.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,33 +46,44 @@ public class ClientLoanController {
         //axios.post("/api/loans", { loanId: this.loanTypeId, amount: this.amount, payments: this.payments, toAccountNumber: this.accountToNumber })
         @Transactional
         @RequestMapping(path = "/loans", method = RequestMethod.POST)
-        public ResponseEntity<Object> newLoan(@RequestBody ClientLoan solicitedLoan, String accountNumber, Authentication authentication ){
+        public ResponseEntity<Object> newLoan(@RequestBody LoanAplicationDTO loanAplicationDTO, Authentication authentication ){
             Client current = clientRepository.findByEmail(authentication.getName());
-            Account account = accountRepository.findByNumber(accountNumber);
-            Loan loan = loanRepository.findById(solicitedLoan.getId()).orElse(null);
+            Account account = accountRepository.findByNumber(loanAplicationDTO.getAccountNumber());
+            Loan loan = loanRepository.findById(loanAplicationDTO.getLoanId()).orElse(null);
 
-            if (loan==null || solicitedLoan.getLoan().getName().isEmpty() || solicitedLoan.getLoan().getPayments().isEmpty() || solicitedLoan.getLoan().getMaxAmount()==null) {
+            if (loan==null || loanAplicationDTO.getLoanId()==0 || loanAplicationDTO.getAmount()==0 || loanAplicationDTO.getPayments()==0
+                    || loanAplicationDTO.getAccountNumber().isEmpty()
+            ) {
                 return new ResponseEntity<>("préstamo no existe o datos inválidos", HttpStatus.FORBIDDEN);
             }else{
-                if (solicitedLoan.getLoan().getMaxAmount() > loan.getMaxAmount()) {
+                if (loanAplicationDTO.getAmount() > loan.getMaxAmount()) {
                     return new ResponseEntity<>("el monto solicitado supera el maximo permitido", HttpStatus.FORBIDDEN);
                 }else{
-                    if(!loan.getPayments().contains(solicitedLoan.getPayments())) {
+                    if(!loan.getPayments().contains(loanAplicationDTO.getPayments())) {
                         return new ResponseEntity<>("la cantidad de cuotas solicitada no está disponible", HttpStatus.FORBIDDEN);
                     }else {
-                        if ((accountNumber == null) || !(account.getClient().equals(current))) {
-                            return new ResponseEntity<>("la cuenta destino no existe o pertenece a otro cliente", HttpStatus.FORBIDDEN);
+                        if ((loanAplicationDTO.getAccountNumber() == null) || !(account.getClient().equals(current))) {
+                            return new ResponseEntity<>("la cuenta destino no existe ó pertenece a otro cliente", HttpStatus.FORBIDDEN);
                         } else {
-                            account.setBalance(account.getBalance()+solicitedLoan.getAmount());
+                            //se guarda la cuenta con el nuevo balance
+                            account.setBalance(account.getBalance()+loanAplicationDTO.getAmount());
                             accountRepository.save(account);
-                            //TransactionType type, Double amount, Account account, String description
-                            Transaction transaction = new Transaction(TransactionType.DEBIT,solicitedLoan.getAmount(),account,
-                                    /*descripcion*/(solicitedLoan.getLoan().getName()+ " " + solicitedLoan.getAmount() + " " + solicitedLoan.getPayments())  );
-                            transactionRepository.save(transaction);
-                            solicitedLoan.setAmount(solicitedLoan.getAmount() + solicitedLoan.getAmount()*.20);
-                            solicitedLoan.setClient(current);
-                            solicitedLoan.setLoan(loan);
-                            clientLoanRepository.save(solicitedLoan);
+                            //se guarda la transaccion
+                            Transaction transaction =
+                            transactionRepository.save(new Transaction(
+                                    TransactionType.DEBIT,loanAplicationDTO.getAmount(),account,
+                                    /*descripcion*/(loan.getName()+ " " + loanAplicationDTO.getAmount() + " " + loanAplicationDTO.getPayments())));
+                            //se guarda una entidad con la relacion cliente, prestamo, pago y cant de pagos
+                            ClientLoan clientLoan = new ClientLoan(current, loan, loanAplicationDTO.getPayments(),
+                                    //se guarda el monto con los intereses
+                                    (loanAplicationDTO.getAmount() * 1.2 ) );
+                            clientLoanRepository.save(clientLoan);
+                            /*
+                            //se actualizan los clientes y prestamos para que corresponda la info
+                            current.addClientLoan(clientLoan);
+                            clientRepository.save(current);
+                            loan.addClientLoan(clientLoan);
+                            loanRepository.save(loan);*/
                             return new ResponseEntity<>(HttpStatus.CREATED);
                         }
                     }

@@ -65,7 +65,6 @@ public class Loan {
     }
 
     public void addClientLoan(ClientLoan clientLoan){
-        clientLoan.setLoan(this);
         clients.add(clientLoan);
     }
 
