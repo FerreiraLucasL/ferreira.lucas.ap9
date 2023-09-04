@@ -10,7 +10,7 @@ Vue.createApp({
         getData: function () {
             axios.get("/api/clients/current")
                 .then((response) => {
-                    //get client ifo
+                    //get client info
                     this.clientInfo = response.data;
                 })
                 .catch((error) => {

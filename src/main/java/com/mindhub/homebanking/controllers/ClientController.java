@@ -28,11 +28,11 @@ public class ClientController {
 
     //peticion HTTP(get) para devolver todos los clientesDTO * devolver soolo el cliente actual por cuestiones de seguridad :D
     @GetMapping("/clients")
-    public ClientDTO getClients(Authentication authentication){
-//        return clientRepository.findAll().stream().map(client -> new ClientDTO(client)).collect(Collectors.toList());
-        ClientDTO current = getCurrent(authentication);
-        return current;
+    public List<ClientDTO> getClients(Authentication authentication){
+        return clientRepository.findAll().stream().map(client -> new ClientDTO(client)).collect(Collectors.toList());
+
     }
+
     //peticion HTTP(get) para devolver 1 clienteDTO, si el que solicita es el dueño de esa informacion
     @GetMapping("/clients/{id}")
     public ResponseEntity<Object> getClient(@PathVariable Long id, Authentication authentication){
@@ -48,11 +48,13 @@ public class ClientController {
             return new ResponseEntity<>("cliente no existe", HttpStatus.BAD_REQUEST);
         }
     }
+
     //get de cliente logueado actualmente
     @RequestMapping(path = "/clients/current", method = RequestMethod.GET)
     public ClientDTO getCurrent(Authentication authentication){
         return new ClientDTO(clientRepository.findByEmail(authentication.getName()));
     }
+
     //post de nuevo cliente
     @RequestMapping(path = "/clients/register", method = RequestMethod.POST)
     public ResponseEntity<Object> register(

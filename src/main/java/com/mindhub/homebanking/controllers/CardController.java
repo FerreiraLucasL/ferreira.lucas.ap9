@@ -26,7 +26,8 @@ public class CardController {
     @GetMapping("/cards")
     public List<CardDTO> getCards(Authentication authentication){
             Client client = clientRepository.findByEmail(authentication.getName());
-            return client.getCards().stream().map(card -> new CardDTO(card)).collect(Collectors.toList());
+            return client.getCards().stream().map(card ->
+                    new CardDTO(card)).collect(Collectors.toList());
     }
 
     @GetMapping("/cards/{id}")

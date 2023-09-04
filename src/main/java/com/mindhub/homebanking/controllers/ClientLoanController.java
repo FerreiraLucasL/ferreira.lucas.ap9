@@ -71,19 +71,14 @@ public class ClientLoanController {
                             //se guarda la transaccion
                             Transaction transaction =
                             transactionRepository.save(new Transaction(
-                                    TransactionType.DEBIT,loanAplicationDTO.getAmount(),account,
-                                    /*descripcion*/(loan.getName()+ " " + loanAplicationDTO.getAmount() + " " + loanAplicationDTO.getPayments())));
+                                    TransactionType.CREDIT,loanAplicationDTO.getAmount(),account,
+                                    //descripcion
+                                    (loan.getName()+ " " + (current.getFirstName() + current.getLastName())  + " " + loanAplicationDTO.getPayments())));
                             //se guarda una entidad con la relacion cliente, prestamo, pago y cant de pagos
                             ClientLoan clientLoan = new ClientLoan(current, loan, loanAplicationDTO.getPayments(),
                                     //se guarda el monto con los intereses
                                     (loanAplicationDTO.getAmount() * 1.2 ) );
                             clientLoanRepository.save(clientLoan);
-                            /*
-                            //se actualizan los clientes y prestamos para que corresponda la info
-                            current.addClientLoan(clientLoan);
-                            clientRepository.save(current);
-                            loan.addClientLoan(clientLoan);
-                            loanRepository.save(loan);*/
                             return new ResponseEntity<>(HttpStatus.CREATED);
                         }
                     }
