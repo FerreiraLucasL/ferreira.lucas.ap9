@@ -44,8 +44,7 @@ public class AccountController {
     public ResponseEntity<?> createAccount(Authentication authentication){
         if ( (authentication!=null ) && (clientService.getCurrent(authentication)!=null)) {
             if(clientService.getCurrent(authentication).getAccounts().size()<3){
-                Account newAccount = new Account(clientService.getCurrent(authentication), accountService.createAccountNumber());
-                accountService.save(newAccount);
+                accountService.save(new Account(clientService.getCurrent(authentication), accountService.createAccountNumber()));
                 return new ResponseEntity<>("se ha creado la cuenta", HttpStatus.CREATED);
             }else {
                 return new ResponseEntity<>("el usuario ya tiene 3 cuentas ",HttpStatus.FORBIDDEN);

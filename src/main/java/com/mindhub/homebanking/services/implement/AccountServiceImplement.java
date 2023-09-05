@@ -38,4 +38,13 @@ public class AccountServiceImplement implements AccountService {
         return accountRepository.findAll().stream().map(account -> new AccountDTO(account)).collect(Collectors.toList());
     }
 
+    @Override
+    public Account findByNumber(String number) {
+         if (accountRepository.existsByNumber(number)){
+             return accountRepository.findByNumber(number);
+         }else{
+             return null;
+         }
+    }
+
 }

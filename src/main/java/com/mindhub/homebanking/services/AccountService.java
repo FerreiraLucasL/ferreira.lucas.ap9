@@ -10,5 +10,6 @@ public interface AccountService {
     void save(Account account);
     Account findById(Long id);
     List<AccountDTO> getAccountsDTO();
+    Account findByNumber(String number);
 
 }

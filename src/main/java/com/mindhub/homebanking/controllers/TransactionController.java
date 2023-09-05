@@ -8,6 +8,8 @@ import com.mindhub.homebanking.models.TransactionType;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
 import com.mindhub.homebanking.repositories.TransactionRepository;
+import com.mindhub.homebanking.services.AccountService;
+import com.mindhub.homebanking.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,20 +25,19 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api")
 public class TransactionController {
-    @Autowired private TransactionRepository transactionRepository;
-    @Autowired private ClientRepository clientRepository;
-    @Autowired private AccountRepository accountRepository;
+    @Autowired private TransactionService transactionService;
+    @Autowired private AccountService accountService;
     @GetMapping("/transactions")
     public List<TransactionDTO> getTransactions(){
-        return transactionRepository.findAll().stream().map(transaction -> new TransactionDTO(transaction)).collect(Collectors.toList());
+        return transactionService.getTransactions().stream().map(transaction -> new TransactionDTO(transaction)).collect(Collectors.toList());
     }
 
     @GetMapping("/transactions/{id}")
     public TransactionDTO getTransaction(@PathVariable Long id){
-        return new TransactionDTO(transactionRepository.getReferenceById(id));
+        return new TransactionDTO(transactionService.getTransaction(id));
     }
-    //endpoint desde el front
-    // /api/transactions${this.accountFromNumber}${this.accountToNumber}${this.amount}${this.description}`
+
+    //transacciones cuenta a cuenta
     @Transactional
     @RequestMapping(path = "/transactions" , method = RequestMethod.POST)
     public ResponseEntity newTransaction(Authentication authentication,
@@ -44,12 +45,10 @@ public class TransactionController {
                                          @RequestParam String description,
                                          @RequestParam String fromAccountNumber,
                                          @RequestParam String toAccountNumber){
-        Client client = clientRepository.findByEmail(authentication.getName());
-        Account accountTo = accountRepository.findByNumber(toAccountNumber);
-        Account accountFrom = accountRepository.findByNumber(fromAccountNumber);
-        if( ( amount == null ) || (description.isEmpty()) ){
+        Account accountTo = accountService.findByNumber(toAccountNumber);
+        Account accountFrom = accountService.findByNumber(fromAccountNumber);
+        if( ( amount == 0 ) || (description.isEmpty()) ){
             return new ResponseEntity("descripcion o monto vacíos D:", HttpStatus.FORBIDDEN);
-
         }else{
             if ( (accountTo == null || accountFrom == null) ){
                 return new ResponseEntity("la cuenta no existe XC", HttpStatus.FORBIDDEN);
@@ -64,19 +63,16 @@ public class TransactionController {
                         accountFrom.setBalance(accountFrom.getBalance() - amount);
                         accountTo.setBalance(accountTo.getBalance() + amount);
                         //guardo las transacciones Transaction(TransactionType type, Double amount, String description, LocalDateTime date)
-                        Transaction transactionFrom = new Transaction(TransactionType.DEBIT, amount, description, LocalDateTime.now());
-                        transactionRepository.save(transactionFrom);
-                        Transaction transactionTo = new Transaction(TransactionType.CREDIT, amount, description, LocalDateTime.now());
-                        transactionRepository.save(transactionTo);
-                        //persisto las cuentas con sus cambios
-                        accountRepository.save(accountFrom);
-                        accountRepository.save(accountTo);
+                        transactionService.save(new Transaction(TransactionType.DEBIT, amount, description, LocalDateTime.now()));//transaction to account
+                        transactionService.save(new Transaction(TransactionType.CREDIT, amount, description, LocalDateTime.now()));//transaction from account
+                        // persisto las cuentas con sus cambios
+                        accountService.save(accountFrom);
+                        accountService.save(accountTo);
                         return new ResponseEntity("transaccion completa :D", HttpStatus.CREATED);
                     }
                 }
             }
         }
-
     }
 
 }
