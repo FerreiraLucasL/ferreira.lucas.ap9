@@ -5,6 +5,7 @@ import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
+import com.mindhub.homebanking.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,25 +23,21 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class ClientController {
     @Autowired private PasswordEncoder passwordEncoder;
-    //servicio que busca en la BD
-    @Autowired private ClientRepository clientRepository;
+    @Autowired private ClientService clientService;
     @Autowired private AccountRepository accountRepository;
+
 
     //peticion HTTP(get) para devolver todos los clientesDTO * devolver soolo el cliente actual por cuestiones de seguridad :D
     @GetMapping("/clients")
-    public List<ClientDTO> getClients(Authentication authentication){
-        return clientRepository.findAll().stream().map(client -> new ClientDTO(client)).collect(Collectors.toList());
-
+    public List<ClientDTO> getClients(){
+        return clientService.getClientsDTO();
     }
-
     //peticion HTTP(get) para devolver 1 clienteDTO, si el que solicita es el dueño de esa informacion
     @GetMapping("/clients/{id}")
     public ResponseEntity<Object> getClient(@PathVariable Long id, Authentication authentication){
-        Client client = clientRepository.getReferenceById(id);
-        Client current = clientRepository.findByEmail(authentication.getName());
-        if (client != null) {
-            if (client.equals(current)) {
-                return new ResponseEntity<>(new ClientDTO(client), HttpStatus.FOUND);
+        if ( (clientService.getClient(id)!=null) )  {
+            if (clientService.getClient(id).equals(clientService.getCurrent(authentication))) {
+                return new ResponseEntity<>( clientService.getClientDTO(id), HttpStatus.FOUND);
             } else {
                 return new ResponseEntity<>("La informacion que intenta acceder está fuera de su alcance", HttpStatus.I_AM_A_TEAPOT);
             }
@@ -52,7 +49,7 @@ public class ClientController {
     //get de cliente logueado actualmente
     @RequestMapping(path = "/clients/current", method = RequestMethod.GET)
     public ClientDTO getCurrent(Authentication authentication){
-        return new ClientDTO(clientRepository.findByEmail(authentication.getName()));
+        return new ClientDTO(clientService.getCurrent(authentication));
     }
 
     //post de nuevo cliente
@@ -65,12 +62,12 @@ public class ClientController {
         if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-        if (clientRepository.findByEmail(email) !=  null) {
+        if (clientService.findByEmail(email) !=  null) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         //nuevo cliente objeto y persistencia
         Client client = new Client(firstName, lastName, email, passwordEncoder.encode(password));
-        clientRepository.save(client);
+        clientService.save(client);
         //nueva cuenta asignada al nuevo cliente
         Account newAccount = new Account(client, createAccountNumber());
         accountRepository.save(newAccount);
@@ -86,5 +83,4 @@ public class ClientController {
         }while (accountRepository.existsByNumber(number));
         return number;
     }
-
 }
