@@ -2,9 +2,8 @@ package com.mindhub.homebanking.controllers;
 
 import com.mindhub.homebanking.dtos.AccountDTO;
 import com.mindhub.homebanking.models.Account;
-import com.mindhub.homebanking.models.Client;
-import com.mindhub.homebanking.repositories.AccountRepository;
-import com.mindhub.homebanking.repositories.ClientRepository;
+import com.mindhub.homebanking.services.AccountService;
+import com.mindhub.homebanking.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,32 +11,30 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
 public class AccountController {
-    @Autowired private AccountRepository accountRepository;
-    @Autowired private ClientRepository clientRepository;
+    @Autowired private ClientService clientService;
+    @Autowired private AccountService accountService;
 
     @GetMapping("/clients/current/accounts")
     public List<AccountDTO> getCurrentAccounts(Authentication authentication){
-        Client client = clientRepository.findByEmail(authentication.getName());
-        return client.getAccounts().stream().map(account -> new AccountDTO(account)).collect(Collectors.toList());
+        return clientService.getCurrent(authentication).getAccounts().stream().map(
+                                         account -> new AccountDTO(account)).collect(Collectors.toList());
     }
 
     @GetMapping("/accounts")
-    public List<AccountDTO> getAccounts(Authentication authentication){
-        return getCurrentAccounts(authentication);
+    public List<AccountDTO> getAccounts(){
+        return accountService.getAccountsDTO();
     }
 
     @GetMapping("/accounts/{id}")
     public ResponseEntity<Object> getAccount(@PathVariable Long id, Authentication authentication){
-        Client client = clientRepository.findByEmail(authentication.getName());
-        Account account = accountRepository.findById(id).orElse(null);
-        if((client!=null)&&(account!=null)&&(account.getClient().equals(client))){
-            return new ResponseEntity<>(new AccountDTO(account),HttpStatus.FOUND);
+        if((clientService.getCurrent(authentication)==null)&&(accountService.findById(id)!=null)
+                && (accountService.findById(id).getClient().equals(clientService.getCurrent(authentication)))){
+            return new ResponseEntity<>(new AccountDTO(accountService.findById(id)),HttpStatus.FOUND);
         }else{
             return new ResponseEntity<>("cuenta no existe o no le pertenece",HttpStatus.NOT_FOUND);
         }
@@ -45,11 +42,10 @@ public class AccountController {
 
     @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
     public ResponseEntity<?> createAccount(Authentication authentication){
-        Client client = clientRepository.findByEmail(authentication.getName());
-        if ( (authentication!=null ) && (client!=null)) {
-            if(client.getAccounts().size()<3){
-                Account newAccount = new Account(client, createAccountNumber());
-                accountRepository.save(newAccount);
+        if ( (authentication!=null ) && (clientService.getCurrent(authentication)!=null)) {
+            if(clientService.getCurrent(authentication).getAccounts().size()<3){
+                Account newAccount = new Account(clientService.getCurrent(authentication), accountService.createAccountNumber());
+                accountService.save(newAccount);
                 return new ResponseEntity<>("se ha creado la cuenta", HttpStatus.CREATED);
             }else {
                 return new ResponseEntity<>("el usuario ya tiene 3 cuentas ",HttpStatus.FORBIDDEN);
@@ -58,16 +54,4 @@ public class AccountController {
             return new ResponseEntity<>("no está logueado",HttpStatus.FORBIDDEN);
         }
     }
-
-    //crear numero aleatorio de cuenta
-
-    public String createAccountNumber(){
-        String number;
-        Random randomcito = new Random();
-        do {
-            number = "VIN" + String.valueOf(randomcito.nextInt(99999999));
-        }while (accountRepository.existsByNumber(number));
-        return number;
-    }
-
 }

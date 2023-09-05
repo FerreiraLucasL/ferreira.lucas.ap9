@@ -5,6 +5,7 @@ import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
+import com.mindhub.homebanking.services.AccountService;
 import com.mindhub.homebanking.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,14 +25,15 @@ import java.util.stream.Collectors;
 public class ClientController {
     @Autowired private PasswordEncoder passwordEncoder;
     @Autowired private ClientService clientService;
-    @Autowired private AccountRepository accountRepository;
+    @Autowired private AccountService accountService;
 
 
-    //peticion HTTP(get) para devolver todos los clientesDTO * devolver soolo el cliente actual por cuestiones de seguridad :D
+    //peticion HTTP(get) para devolver todos los clientes
     @GetMapping("/clients")
     public List<ClientDTO> getClients(){
         return clientService.getClientsDTO();
     }
+
     //peticion HTTP(get) para devolver 1 clienteDTO, si el que solicita es el dueño de esa informacion
     @GetMapping("/clients/{id}")
     public ResponseEntity<Object> getClient(@PathVariable Long id, Authentication authentication){
@@ -69,18 +71,7 @@ public class ClientController {
         Client client = new Client(firstName, lastName, email, passwordEncoder.encode(password));
         clientService.save(client);
         //nueva cuenta asignada al nuevo cliente
-        Account newAccount = new Account(client, createAccountNumber());
-        accountRepository.save(newAccount);
+        accountService.save(new Account(client, accountService.createAccountNumber()));
         return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-    //me parece anti polimorfico copiar nomas el método que genera numero de tarjeta acá, pero no supe donde ponerlo para poder reutilizarlo,
-    // ya que ocupa el repositorio de cuenta y no se donde iría :D
-    public String createAccountNumber(){
-        String number;
-        Random randomcito = new Random();
-        do {
-            number = "VIN" + String.valueOf(randomcito.nextInt(99999999));
-        }while (accountRepository.existsByNumber(number));
-        return number;
     }
 }
