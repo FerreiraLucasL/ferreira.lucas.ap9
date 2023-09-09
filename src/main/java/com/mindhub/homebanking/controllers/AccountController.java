@@ -24,7 +24,6 @@ public class AccountController {
         return clientService.getCurrent(authentication).getAccounts().stream().map(
                                          account -> new AccountDTO(account)).collect(Collectors.toList());
     }
-
     @GetMapping("/accounts")
     public List<AccountDTO> getAccounts(){
         return accountService.getAccountsDTO();
@@ -32,14 +31,13 @@ public class AccountController {
 
     @GetMapping("/accounts/{id}")
     public ResponseEntity<Object> getAccount(@PathVariable Long id, Authentication authentication){
-        if((clientService.getCurrent(authentication)==null)&&(accountService.findById(id)!=null)
+        if((clientService.getCurrent(authentication)==null) &&(accountService.findById(id)!=null)
                 && (accountService.findById(id).getClient().equals(clientService.getCurrent(authentication)))){
-            return new ResponseEntity<>(new AccountDTO(accountService.findById(id)),HttpStatus.FOUND);
+            return new ResponseEntity<>(new AccountDTO(accountService.findById(id)),HttpStatus.ACCEPTED);
         }else{
             return new ResponseEntity<>("cuenta no existe o no le pertenece",HttpStatus.NOT_FOUND);
         }
     }
-
     @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
     public ResponseEntity<?> createAccount(Authentication authentication){
         if ( (authentication!=null ) && (clientService.getCurrent(authentication)!=null)) {

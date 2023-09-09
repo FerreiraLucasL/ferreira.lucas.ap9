@@ -53,11 +53,18 @@ public class HomebankingApplication {
 			Loan hipotecario = new Loan("Hipotecario",500000.0,cuotasHipotecario);
 			Loan personal = new Loan("Personal",100000.0,cuotasPersonal);
 			Loan automotriz = new Loan("Automotriz",300000.0,cuotasAutomotriz);
+			Transaction transaction1 = new Transaction(TransactionType.DEBIT, 10000.0, "lorem ipsum :v ", today);
+			Transaction transaction2 = new Transaction(TransactionType.CREDIT, 5000.0, "lorem ipsum :v ", today);
+			Transaction transaction3 = new Transaction(TransactionType.CREDIT, 3000.0, "lorem ipsum :v ", today);
 
 			//asignaciones
+			client1.addTransaction(transaction1,account1);
+			client1.addTransaction(transaction2,account2);
+			client2.addTransaction(transaction3,account3);
 			client1.addAccount(account1);
 			client1.addAccount(account2);
 			client2.addAccount(account3);
+
 
 			//persistencia
 			clientRepository.save(client1);
@@ -69,8 +76,9 @@ public class HomebankingApplication {
 			loanRepository.save(hipotecario);
 			loanRepository.save(automotriz);
 			loanRepository.save(personal);
-
-
+			transactionRepository.save(transaction1);
+			transactionRepository.save(transaction2);
+			transactionRepository.save(transaction3);
 		};
 	}
 }
