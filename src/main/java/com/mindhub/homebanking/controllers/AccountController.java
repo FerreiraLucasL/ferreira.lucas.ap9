@@ -2,6 +2,7 @@ package com.mindhub.homebanking.controllers;
 
 import com.mindhub.homebanking.dtos.AccountDTO;
 import com.mindhub.homebanking.models.Account;
+import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.services.AccountService;
 import com.mindhub.homebanking.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,19 +32,22 @@ public class AccountController {
 
     @GetMapping("/accounts/{id}")
     public ResponseEntity<Object> getAccount(@PathVariable Long id, Authentication authentication){
-        if((clientService.getCurrent(authentication)==null) &&(accountService.findById(id)!=null)
-                && (accountService.findById(id).getClient().equals(clientService.getCurrent(authentication)))){
-            return new ResponseEntity<>(new AccountDTO(accountService.findById(id)),HttpStatus.ACCEPTED);
+        Client client = clientService.getCurrent(authentication);
+        Account account = accountService.findById(id);
+        if((client != null) && (account!=null)
+                && (account.getClient().equals(client))){
+            return new ResponseEntity<>(new AccountDTO(accountService.findById(id)),HttpStatus.OK);
         }else{
             return new ResponseEntity<>("cuenta no existe o no le pertenece",HttpStatus.NOT_FOUND);
         }
     }
     @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
     public ResponseEntity<?> createAccount(Authentication authentication){
-        if ( (authentication!=null ) && (clientService.getCurrent(authentication)!=null)) {
-            if(clientService.getCurrent(authentication).getAccounts().size()<3){
-                accountService.save(new Account(clientService.getCurrent(authentication), accountService.createAccountNumber()));
-                return new ResponseEntity<>("se ha creado la cuenta", HttpStatus.CREATED);
+        Client client = clientService.getCurrent(authentication);
+        if ( (authentication!=null ) && (client!=null)) {
+            if(client.getAccounts().size()<3){
+                accountService.save(new Account(client, accountService.createAccountNumber()));
+                return new ResponseEntity<>("se ha creado la cuenta", HttpStatus.OK);
             }else {
                 return new ResponseEntity<>("el usuario ya tiene 3 cuentas ",HttpStatus.FORBIDDEN);
             }

@@ -33,8 +33,13 @@ public class TransactionController {
     }
 
     @GetMapping("/transactions/{id}")
-    public TransactionDTO getTransaction(@PathVariable Long id){
-        return new TransactionDTO(transactionService.getTransaction(id));
+    public ResponseEntity<Object> getTransaction(@PathVariable Long id){
+        Transaction transaction = transactionService.getTransaction(id);
+        if (transaction != null) {
+            return new ResponseEntity<>(new TransactionDTO(transaction) ,HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>("transaccion no existe", HttpStatus.FORBIDDEN);
+        }
     }
 
     //transacciones cuenta a cuenta
@@ -47,6 +52,7 @@ public class TransactionController {
                                          @RequestParam String toAccountNumber){
         Account accountTo = accountService.findByNumber(toAccountNumber);
         Account accountFrom = accountService.findByNumber(fromAccountNumber);
+
         if( ( amount == 0 ) || (description.isEmpty()) ){
             return new ResponseEntity("descripcion o monto vacíos D:", HttpStatus.FORBIDDEN);
         }else{
@@ -62,9 +68,9 @@ public class TransactionController {
                         //transfiero los montos entre cuentas
                         accountFrom.setBalance(accountFrom.getBalance() - amount);
                         accountTo.setBalance(accountTo.getBalance() + amount);
-                        //guardo las transacciones Transaction(TransactionType type, Double amount, String description, LocalDateTime date)
-                        transactionService.save(new Transaction(TransactionType.DEBIT, amount, description, LocalDateTime.now()));//transaction to account
-                        transactionService.save(new Transaction(TransactionType.CREDIT, amount, description, LocalDateTime.now()));//transaction from account
+                        //guardo las transacciones Transaction(TransactionType type, Double amount, Account account, String description)
+                        transactionService.save(new Transaction(TransactionType.DEBIT, amount, accountFrom, description));//transaction to account
+                        transactionService.save(new Transaction(TransactionType.CREDIT, amount, accountTo, description));//transaction from account
                         // persisto las cuentas con sus cambios
                         accountService.save(accountFrom);
                         accountService.save(accountTo);
