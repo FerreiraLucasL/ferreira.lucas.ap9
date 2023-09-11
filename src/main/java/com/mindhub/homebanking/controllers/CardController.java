@@ -47,7 +47,7 @@ public class CardController {
         //check si existe una tarjeta de ese color y tipo, sino la puede crear
         if( (clientService.getCurrent(authentication).getCards().stream().filter(card -> card.getType().equals(cardType)).filter(card -> card.getColor().equals(cardColor)).
                 collect(Collectors.toSet()).isEmpty())) {
-            cardService.save(new Card(cardType,cardColor, accountService.createAccountNumber(), clientService.getCurrent(authentication)));
+            cardService.save(new Card(cardType,cardColor, cardService.createCardNumber(), clientService.getCurrent(authentication)));
             return new ResponseEntity<>(HttpStatus.OK);
         }else {
             return new ResponseEntity<>("ya existe una tarjeta de:" +cardType+ " de color" + cardColor, HttpStatus.FORBIDDEN);

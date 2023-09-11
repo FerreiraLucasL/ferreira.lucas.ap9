@@ -33,8 +33,9 @@ public class ClientLoanController {
 
     @GetMapping("/clientLoans/{id}")
     public ResponseEntity<Object> getClientLoans(@PathVariable Long id, Authentication authentication){
-        if((( clientService.getCurrent(authentication) != null) && ( clientLoanService.findById(id) != null )) &&
-            ( clientLoanService.findById(id).getClient().equals(clientService.getCurrent(authentication)) )){
+        Client current = clientService.getCurrent(authentication);
+        if((( current != null) && ( clientLoanService.findById(id) != null )) &&
+            ( clientLoanService.findById(id).getClient().equals(current) )){
             return new ResponseEntity<>(new ClientLoanDTO(clientLoanService.findById(id)),HttpStatus.FOUND);
         }else{
             return new ResponseEntity<>("solicitud de prestamo no existe o no le pertenece",HttpStatus.NOT_FOUND);
@@ -44,6 +45,9 @@ public class ClientLoanController {
     @Transactional
     @RequestMapping(path = "/loans", method = RequestMethod.POST)
     public ResponseEntity<Object> newLoan(@RequestBody LoanAplicationDTO loanAplicationDTO, Authentication authentication ){
+        Client client = clientService.findByEmail(authentication.getName());
+        Account account = accountService.findByNumber(loanAplicationDTO.getAccountNumber());
+        Loan loan = loanService.findById(loanAplicationDTO.getLoanId());
         if (loanService.findById(loanAplicationDTO.getLoanId())==null //comprobar parametros vacíos
                 || loanAplicationDTO.getLoanId()==0 ||
                 loanAplicationDTO.getAmount()==0 ||
@@ -52,31 +56,29 @@ public class ClientLoanController {
         ) {
             return new ResponseEntity<>("préstamo no existe o datos inválidos", HttpStatus.FORBIDDEN);
         }else{
-            if (loanAplicationDTO.getAmount() > loanService.findById(loanAplicationDTO.getLoanId()).getMaxAmount()) {//comprobar validez del monto
+            if (loanAplicationDTO.getAmount() > loan.getMaxAmount()) {//comprobar validez del monto
                 return new ResponseEntity<>("el monto solicitado supera el maximo permitido", HttpStatus.FORBIDDEN);
             }else{
                 if(!loanService.findById(loanAplicationDTO.getLoanId()).getPayments().contains(loanAplicationDTO.getPayments())) {//comprobar validez de las cuotas
                     return new ResponseEntity<>("la cantidad de cuotas solicitada no está disponible", HttpStatus.FORBIDDEN);
                 }else {
                     if ((loanAplicationDTO.getAccountNumber() == null) || //comprobar validez de la cuenta
-                            !(accountService.findByNumber(loanAplicationDTO.getAccountNumber()).getClient().equals(clientService.getCurrent(authentication)))) {
+                            !(account.getClient().equals(client))) {
                         return new ResponseEntity<>("la cuenta destino no existe ó pertenece a otro cliente", HttpStatus.FORBIDDEN);
                     } else {
                         //se guarda la cuenta con el nuevo balance
-                        accountService.findByNumber(loanAplicationDTO.getAccountNumber()).//set de cambios en el balance de la cuenta
-                                setBalance(accountService.findByNumber(loanAplicationDTO.getAccountNumber()).getBalance()+loanAplicationDTO.getAmount());
-                        accountService.save(accountService.findByNumber(loanAplicationDTO.getAccountNumber()));//persisto cambios
-                        //se guarda la transaccion                public Transaction(TransactionType type, Double amount, Account account) {
-
+                        account.setBalance(account.getBalance()+loanAplicationDTO.getAmount()); //set de cambios en el balance de la cuenta
+                        accountService.save(account);//persisto cambios
+                        //se guarda la transaccion
                         Transaction transaction = new Transaction(TransactionType.CREDIT, loanAplicationDTO.getAmount(),
-                                accountService.findByNumber(loanAplicationDTO.getAccountNumber()),
+                                account,
                                 //description
-                                clientService.getCurrent(authentication).getFirstName() + " " + clientService.getCurrent(authentication).getLastName()
-                                + " " + loanService.findById(loanAplicationDTO.getLoanId()).getName() + " " + loanAplicationDTO.getPayments()
+                                client.getFirstName() + " " + client.getLastName() + " " + loanService.findById(loanAplicationDTO.getLoanId()).getName()
+                                        + " " + loanAplicationDTO.getPayments()
                         );
                         transactionService.save(transaction);
                         //se guarda una entidad con la relacion cliente, prestamo, pago y cant de pagos
-                        ClientLoan clientLoan = new ClientLoan(clientService.getCurrent(authentication),
+                        ClientLoan clientLoan = new ClientLoan(client,
                                 //se guarda el monto con los intereses
                                 loanService.findById(loanAplicationDTO.getLoanId()), loanAplicationDTO.getPayments(),
                                 (loanAplicationDTO.getAmount() * 1.2 ) );
