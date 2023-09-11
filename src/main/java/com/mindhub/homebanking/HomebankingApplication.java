@@ -32,7 +32,7 @@ public class HomebankingApplication {
 									  LoanRepository loanRepository,
 									  ClientLoanRepository clientLoanRepository,
 									  CardRepository cardRepository){
-		return (args) -> {
+		return (args) -> {/*
 			LocalDateTime today = LocalDateTime.now();
 			LocalDateTime tomorrow = today.plusDays(1);
 			LocalDateTime thruDate = today.plusYears(5);
@@ -78,7 +78,7 @@ public class HomebankingApplication {
 			loanRepository.save(personal);
 			transactionRepository.save(transaction1);
 			transactionRepository.save(transaction2);
-			transactionRepository.save(transaction3);
+			transactionRepository.save(transaction3);*/
 		};
 	}
 }
