@@ -6,10 +6,9 @@ import com.mindhub.homebanking.models.Account;
 import java.util.List;
 
 public interface AccountService {
-    String createAccountNumber();
     void save(Account account);
     Account findById(Long id);
     List<AccountDTO> getAccountsDTO();
     Account findByNumber(String number);
-
+    String createAccountNumber();
 }

@@ -3,6 +3,7 @@ package com.mindhub.homebanking.services.implement;
 import com.mindhub.homebanking.models.Card;
 import com.mindhub.homebanking.repositories.CardRepository;
 import com.mindhub.homebanking.services.CardService;
+import com.mindhub.homebanking.utils.CardUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,17 +22,16 @@ public class CardServiceImplement implements CardService {
     public void save(Card card) {
         cardRepository.save(card);
     }
-
+    //funcion para generar numero de tarjeta aleatorio que: sea tenga 16 numeros y no sea repetido
     @Override
     public String createCardNumber(){
         String number;
-        Random randomcito = new Random();
-        do {
-            number = String.valueOf(randomcito.nextInt(9999)) + "-"
-                    + String.valueOf(randomcito.nextInt(9999)) + "-"
-                    + String.valueOf(randomcito.nextInt(9999)) + "-"
-                    + String.valueOf(randomcito.nextInt(9999));
-        }while (cardRepository.existsByNumber(number));
+        {
+            {
+                number = CardUtils.createCardNumber();
+                System.out.println(number.length());
+            }while ( cardRepository.existsByNumber(number) );
+        }while ( (number.length() != 19) && (number.length() != 0));
         return number;
     }
 

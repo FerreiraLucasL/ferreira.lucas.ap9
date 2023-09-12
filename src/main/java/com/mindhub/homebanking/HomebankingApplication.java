@@ -2,6 +2,8 @@ package com.mindhub.homebanking;
 
 import com.mindhub.homebanking.models.*;
 import com.mindhub.homebanking.repositories.*;
+import com.mindhub.homebanking.services.AccountService;
+import com.mindhub.homebanking.services.CardService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -27,12 +29,14 @@ public class HomebankingApplication {
 
 	@Bean
 	public CommandLineRunner initData(ClientRepository clientRepository,
-									  AccountRepository accountRepository,
+									  AccountService accountService,
 									  TransactionRepository transactionRepository,
 									  LoanRepository loanRepository,
 									  ClientLoanRepository clientLoanRepository,
-									  CardRepository cardRepository){
-		return (args) -> {/*
+									  CardService cardService){
+		return (args) -> {
+			/*
+
 			LocalDateTime today = LocalDateTime.now();
 			LocalDateTime tomorrow = today.plusDays(1);
 			LocalDateTime thruDate = today.plusYears(5);

@@ -7,6 +7,7 @@ import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
 import com.mindhub.homebanking.services.AccountService;
 import com.mindhub.homebanking.services.ClientService;
+import com.mindhub.homebanking.utils.AccountUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -71,7 +72,7 @@ public class ClientController {
         Client client = new Client(firstName, lastName, email, passwordEncoder.encode(password));
         clientService.save(client);
         //nueva cuenta asignada al nuevo cliente
-        accountService.save(new Account(client, accountService.createAccountNumber()));
+        accountService.save(new Account(client, AccountUtils.createAccountNumber()));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }
