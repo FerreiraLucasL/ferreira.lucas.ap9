@@ -44,7 +44,7 @@ public class TransactionController {
 
     //transacciones cuenta a cuenta
     @Transactional
-    @RequestMapping(path = "/transactions" , method = RequestMethod.POST)
+    @PostMapping(path = "/transactions")
     public ResponseEntity newTransaction(Authentication authentication,
                                          @RequestParam Double amount,
                                          @RequestParam String description,

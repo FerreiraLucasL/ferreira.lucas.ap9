@@ -42,7 +42,7 @@ public class AccountController {
             return new ResponseEntity<>("cuenta no existe o no le pertenece",HttpStatus.NOT_FOUND);
         }
     }
-    @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
+    @PostMapping(path = "/clients/current/accounts")
     public ResponseEntity<?> createAccount(Authentication authentication){
         Client client = clientService.getCurrent(authentication);
         if ( (authentication!=null ) && (client!=null)) {

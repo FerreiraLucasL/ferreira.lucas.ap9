@@ -50,13 +50,13 @@ public class ClientController {
     }
 
     //get de cliente logueado actualmente
-    @RequestMapping(path = "/clients/current", method = RequestMethod.GET)
+    @GetMapping(path = "/clients/current")
     public ClientDTO getCurrent(Authentication authentication){
         return new ClientDTO(clientService.getCurrent(authentication));
     }
 
     //post de nuevo cliente
-    @RequestMapping(path = "/clients/register", method = RequestMethod.POST)
+    @PostMapping(path = "/clients/register")
     public ResponseEntity<Object> register(
             @RequestParam String firstName,
             @RequestParam String lastName,

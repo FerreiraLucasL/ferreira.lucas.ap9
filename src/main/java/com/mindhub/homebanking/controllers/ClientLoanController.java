@@ -43,7 +43,7 @@ public class ClientLoanController {
     }
     //POST para nuevo prestamo pre-aprobado :v
     @Transactional
-    @RequestMapping(path = "/loans", method = RequestMethod.POST)
+    @PostMapping(path = "/loans")
     public ResponseEntity<Object> newLoan(@RequestBody LoanAplicationDTO loanAplicationDTO, Authentication authentication ){
         Client client = clientService.findByEmail(authentication.getName());
         Account account = accountService.findByNumber(loanAplicationDTO.getAccountNumber());

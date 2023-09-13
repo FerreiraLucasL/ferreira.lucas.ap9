@@ -37,11 +37,7 @@ public class CardController {
         }
     }
 
-    public CardDTO getCard(@PathVariable Long id){
-        return new CardDTO(cardService.findById(id));
-    }
-
-    @RequestMapping(path = "/clients/current/cards", method = RequestMethod.POST)
+    @PostMapping(path = "/clients/current/cards")
     public ResponseEntity<Object> createCards(@RequestParam CardType cardType,
                                               @RequestParam CardColor cardColor,
                                               Authentication authentication){
@@ -54,5 +50,4 @@ public class CardController {
             return new ResponseEntity<>("ya existe una tarjeta de:" +cardType+ " de color" + cardColor, HttpStatus.FORBIDDEN);
         }
     }
-
 }
