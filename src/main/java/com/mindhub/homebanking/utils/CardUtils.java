@@ -11,10 +11,10 @@ public class CardUtils {
     public static String createCardNumber(){
         String number;
         Random randomcito = new Random();
-            number = String.valueOf(randomcito.nextInt(9999)) + "-"
-            + String.valueOf(randomcito.nextInt(9999)) + "-"
-            + String.valueOf(randomcito.nextInt(9999)) + "-"
-            + String.valueOf(randomcito.nextInt(9999));
+            number = String.valueOf(randomcito.nextInt(999,9999)) + "-"
+            + String.valueOf(randomcito.nextInt(999,9999)) + "-"
+            + String.valueOf(randomcito.nextInt(999,9999)) + "-"
+            + String.valueOf(randomcito.nextInt(999,9999));
         return number;
 
     }

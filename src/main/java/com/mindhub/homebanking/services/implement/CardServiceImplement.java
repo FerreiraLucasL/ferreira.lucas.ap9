@@ -27,13 +27,9 @@ public class CardServiceImplement implements CardService {
     public String createCardNumber(){
         String number;
         {
-            {
-                number = CardUtils.createCardNumber();
-                System.out.println(number.length());
-            }while ( cardRepository.existsByNumber(number) );
-        }while ( (number.length() != 19) && (number.length() != 0));
+            number = CardUtils.createCardNumber();
+        }while ( cardRepository.existsByNumber(number) );
         return number;
     }
-
 }
 
