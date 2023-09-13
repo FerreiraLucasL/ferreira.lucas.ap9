@@ -9,9 +9,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,19 +18,18 @@ import static com.mindhub.homebanking.models.TransactionType.DEBIT;
 
 @SpringBootApplication
 public class HomebankingApplication {
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+	//@Autowired	private PasswordEncoder passwordEncoder;
 	public static void main(String[] args) {
 		SpringApplication.run(HomebankingApplication.class, args);
 	}
 
 	@Bean
-	public CommandLineRunner initData(ClientRepository clientRepository,
+	public CommandLineRunner initData(/*ClientRepository clientRepository,
 									  AccountService accountService,
 									  TransactionRepository transactionRepository,
 									  LoanRepository loanRepository,
 									  ClientLoanRepository clientLoanRepository,
-									  CardService cardService){
+									  CardService cardService*/){
 		return (args) -> {
 			/*
 			LocalDateTime today = LocalDateTime.now();

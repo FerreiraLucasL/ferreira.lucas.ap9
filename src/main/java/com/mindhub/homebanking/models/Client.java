@@ -77,26 +77,6 @@ public class Client {
         return cards;
     }
 
-    //metodo que devuelve la cantidad de tarjetas de debito deprecado :v
-/*    public int getDebitCards(){
-        int cant = 0;
-             for (Card card : cards) {
-                 if (card.getType() == CardType.DEBIT) {
-                     cant++;
-                 }
-             }
-        return cant;
-    }*/
-    //metodo que devuelve la cantidad de tarjetas de credito, deprecado :v
-/*    public int getCreditCards(){
-        int cant = 0;
-        for (Card card : cards) {
-            if (card.getType() == CardType.CREDIT) {
-                cant++;
-            }
-        }
-        return cant;
-    }*/
 
 
     //setters
@@ -129,7 +109,5 @@ public class Client {
     public void addClientLoan(ClientLoan clientLoan){
         loans.add(clientLoan);
     }
-
-
 
 }
