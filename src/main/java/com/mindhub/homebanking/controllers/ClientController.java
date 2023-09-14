@@ -75,4 +75,9 @@ public class ClientController {
         accountService.save(new Account(client, AccountUtils.createAccountNumber()));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
+    @GetMapping("/ping")
+    public String ping(){
+        return "pong";
+    }
 }
