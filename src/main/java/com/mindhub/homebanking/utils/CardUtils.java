@@ -12,9 +12,9 @@ public class CardUtils {
         String number;
         Random randomcito = new Random();
             number = String.valueOf(randomcito.nextInt(999,9999)) + "-"
-            + String.valueOf(randomcito.nextInt(999,9999)) + "-"
-            + String.valueOf(randomcito.nextInt(999,9999)) + "-"
-            + String.valueOf(randomcito.nextInt(999,9999));
+            + String.valueOf(randomcito.nextInt(999, 9999)) + "-"
+            + String.valueOf(randomcito.nextInt(999, 9999)) + "-"
+            + String.valueOf(randomcito.nextInt(999, 9999));
         return number;
 
     }
